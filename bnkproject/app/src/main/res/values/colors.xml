@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="PointColor">#ff2f61</color>
+    <color name="BackColor">#f6f6f6</color>
+    <color name="WhiteColor">#ffffff</color>
+    <color name="FontDefaultColor">#7A7A7A</color>
+</resources>
+
+

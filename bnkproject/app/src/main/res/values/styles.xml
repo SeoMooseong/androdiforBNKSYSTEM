@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/ActionBars</item>
+
+    </style>
+    <style name="ActionBars" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="background">@color/BackColor</item>
+        <item name="titleTextStyle">@style/ActionBars_title</item>
+    </style>
+    <style name="ActionBars_title"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/PointColor</item>
+    </style>
+    <style name="navigationView">
+        <item name="android:background">@color/BackColor</item>
+    </style>
+
+</resources>
