@@ -2,5 +2,7 @@
     <string name="app_name">BNKSYS</string>
     <string name="item_home">홈</string>
     <string name="item_analysis">분석</string>
-    <string name="item_profile">내정보</string>
+    <string name="item_profile">지도</string>
+    <string name="search_title">검색</string>
+    <string name="search_hint">아파트명을 검색해주세요</string>
 </resources>
