@@ -1,15 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="actionBarStyle">@style/ActionBars</item>
         <item name="android:statusBarColor">@color/PointColor</item>
-
-    </style>
-    <style name="ActionBars" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="background">@color/PointColor</item>
-        <item name="titleTextStyle">@style/ActionBars_title</item>
     </style>
     <style name="ActionBars_title"
         parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
