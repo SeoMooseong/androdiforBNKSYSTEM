@@ -28,11 +28,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //툴바관련
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setLogo(R.drawable.logo);
-    getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle(R.string.bar_name);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setElevation(0);
+
+        //바텀네비게이션 프래그먼트관련
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.frameLayout, home).commitAllowingStateLoss();
 
