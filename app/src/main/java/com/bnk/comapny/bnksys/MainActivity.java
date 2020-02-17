@@ -12,22 +12,41 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity {
+import com.bnk.comapny.bnksys.SQL.DataAdapter;
+import com.bnk.comapny.bnksys.SQL.MyDBHelper;
+import com.bnk.comapny.bnksys.model.Apartment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+    private MyDBHelper myDBHelper;
     private FragmentManager manager = getSupportFragmentManager();
     private FragmentHome home = new FragmentHome();
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
+    public List<Apartment> apartmentList;
+
+    private  void initLoadDB(){
+        DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
+        mDbHelper.createDatabase();
+        mDbHelper.open();
+
+        apartmentList = mDbHelper.getTableData();
+        mDbHelper.close();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //DB관련
 
         //툴바관련
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -43,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bnaviview = findViewById(R.id.navigationView);
 
         bnaviview.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+
+        initLoadDB();
+
+
     }
 
     @Override
