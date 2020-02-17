@@ -15,7 +15,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentHome home = new FragmentHome();
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
+
+    private SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bnaviview = findViewById(R.id.navigationView);
 
         bnaviview.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+
+
     }
 
     @Override
@@ -57,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
         searchView.setQueryHint("아파트 명을 입력해주세요");
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+
+        //자동완성 관련
+        String data[]={"Emmanuel", "Olayemi", "Henrry", "Mark", "Steve", "Ayomide", "David", "Anthony", "Adekola", "Adenuga"};
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, data){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent){
+                // Get the current item from ListView
+                View view = super.getView(position,convertView,parent);
+                view.setBackgroundColor(Color.WHITE);
+//                view.setLayoutParams();
+                return view;
+            }
+        };
+        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setAdapter(dataAdapter);
 
         return true;
     }
@@ -78,6 +102,20 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             return true;
+        }
+    }
+
+    class keywordArrayAdapter extends ArrayAdapter<Object> {
+        public keywordArrayAdapter(@androidx.annotation.NonNull Context context, int resource) {
+            super(context, resource);
+        }
+
+        @androidx.annotation.NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @androidx.annotation.NonNull ViewGroup parent) {
+            View view = super.getView(position, convertView, parent);
+            view.setBackgroundColor(Color.WHITE);
+            return view;
         }
     }
 }
