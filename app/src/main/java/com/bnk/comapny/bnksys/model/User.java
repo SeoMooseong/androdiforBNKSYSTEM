@@ -7,22 +7,19 @@ public class User {
     int SalaryM;
     int Money;
     int Deposit;
+    String Field;
     ArrayList<String> apartname;
 
     public User() {
-        this.name="호성";
-        this.SalaryM=7000000;
-        this.Money=10000000;
-        this.Deposit=10000000;
-        this.apartname= new ArrayList<>();
     }
 
-    public int getMoney() {
-        return Money;
-    }
-
-    public void setMoney(int money) {
-        Money = money;
+    public User(String name, int salaryM, int money, String field) {
+        this.name = name;
+        this.SalaryM = salaryM;
+        this.Money = money;
+        this.Deposit = 0;
+        this.Field = field;
+        this.apartname = null;
     }
 
     public String getName() {
@@ -41,12 +38,12 @@ public class User {
         SalaryM = salaryM;
     }
 
-    public ArrayList<String> getApartname() {
-        return apartname;
+    public int getMoney() {
+        return Money;
     }
 
-    public void setApartname(ArrayList<String> apartname) {
-        this.apartname = apartname;
+    public void setMoney(int money) {
+        Money = money;
     }
 
     public int getDeposit() {
@@ -57,11 +54,30 @@ public class User {
         Deposit = deposit;
     }
 
+    public String getField() {
+        return Field;
+    }
+
+    public void setField(String field) {
+        Field = field;
+    }
+
+    public ArrayList<String> getApartname() {
+        return apartname;
+    }
+
+    public void setApartname(ArrayList<String> apartname) {
+        this.apartname = apartname;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
                 ", SalaryM=" + SalaryM +
+                ", Money=" + Money +
+                ", Deposit=" + Deposit +
+                ", Field='" + Field + '\'' +
                 ", apartname=" + apartname +
                 '}';
     }

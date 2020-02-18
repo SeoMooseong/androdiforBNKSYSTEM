@@ -34,20 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
-    public static List<Apartment> apartmentList;
-    public static List<Pir> pirList;
-    public static List<Lir> lirList;
 
-    private  void initLoadDB(){
-        DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
-        mDbHelper.createDatabase();
-        mDbHelper.open();
 
-        apartmentList = mDbHelper.getTableData();
-        pirList = mDbHelper.getTableDataP();
-        lirList=mDbHelper.getTableDataL();
-        mDbHelper.close();
-    }
+
     private SearchView search;
 
     @Override
@@ -71,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         bnaviview.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
-        initLoadDB();
+
     }
 
     @Override

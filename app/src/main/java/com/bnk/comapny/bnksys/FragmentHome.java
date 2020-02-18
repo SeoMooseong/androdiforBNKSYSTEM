@@ -47,14 +47,13 @@ public class FragmentHome extends Fragment {
     TextView salarytext;
     TextView pirtext;
     TextView lirtext;
-    User user;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
           homeview = inflater.inflate(R.layout.home,container,false);
-          user = new User();
-          userPanel(user);
-          chartMoney(user);
+
+          userPanel(StartActivity.user);
+          chartMoney(StartActivity.user);
           chartPIRLIR();
           return homeview;
     }
@@ -65,12 +64,12 @@ public class FragmentHome extends Fragment {
 
         pirtext = homeview.findViewById(R.id.pirm);
 
-        float pirRecently = MainActivity.pirList.get(MainActivity.pirList.size()-1).getpLocal();
+        float pirRecently = LoadingActivity.pirList.get(LoadingActivity.pirList.size()-1).getpLocal();
         double pirM = salaryY*pirRecently;
         pirtext.setText(Math.round(pirM)+"만원");
         lirtext = homeview.findViewById(R.id.lirm);
 
-        float lirRecently = MainActivity.lirList.get(MainActivity.lirList.size()-1).getlLocal();
+        float lirRecently = LoadingActivity.lirList.get(LoadingActivity.lirList.size()-1).getlLocal();
         double lirM = salaryY*lirRecently;
         lirtext.setText(Math.round(lirM)+"만원");
     }
@@ -82,10 +81,10 @@ public class FragmentHome extends Fragment {
         ArrayList<Entry> yPir = new ArrayList<>();
         ArrayList<Entry> yLir = new ArrayList<>();
         int numData = 5;
-        for(int i =0;i<MainActivity.pirList.size();i++)
+        for(int i =0;i<LoadingActivity.pirList.size();i++)
         {
-            Entry c1e1 = new Entry(i,MainActivity.pirList.get(i).getpLocal());
-            Entry c2e2 = new Entry(i,MainActivity.lirList.get(i).getlLocal());
+            Entry c1e1 = new Entry(i,LoadingActivity.pirList.get(i).getpLocal());
+            Entry c2e2 = new Entry(i,LoadingActivity.lirList.get(i).getlLocal());
             yPir.add(c1e1);
             yLir.add(c2e2);
         }
@@ -105,10 +104,10 @@ public class FragmentHome extends Fragment {
         List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(setComp1);
         dataSets.add(setComp2);
-        final String[] quarters = new String[MainActivity.pirList.size()];
+        final String[] quarters = new String[LoadingActivity.pirList.size()];
 
         int size=0;
-        for(Pir pir : MainActivity.pirList)
+        for(Pir pir : LoadingActivity.pirList)
         {
             quarters[size++]=pir.getpDay();
         }
