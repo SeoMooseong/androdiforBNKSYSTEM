@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -19,31 +18,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 import com.bnk.comapny.bnksys.SQL.DataAdapter;
 import com.bnk.comapny.bnksys.SQL.MyDBHelper;
 import com.bnk.comapny.bnksys.model.Apartment;
+import com.bnk.comapny.bnksys.model.Lir;
+import com.bnk.comapny.bnksys.model.Pir;
 
-import java.util.ArrayList;
 import java.util.List;
 import androidx.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
-    private MyDBHelper myDBHelper;
     private FragmentManager manager = getSupportFragmentManager();
     private FragmentHome home = new FragmentHome();
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
-    public List<Apartment> apartmentList;
+    public static List<Apartment> apartmentList;
+    public static List<Pir> pirList;
+    public static List<Lir> lirList;
 
     private  void initLoadDB(){
         DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
         mDbHelper.createDatabase();
         mDbHelper.open();
-
+        
         apartmentList = mDbHelper.getTableData();
+        pirList = mDbHelper.getTableDataP();
+        lirList=mDbHelper.getTableDataL();
         mDbHelper.close();
     }
     private SearchView search;
