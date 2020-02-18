@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
@@ -127,6 +128,11 @@ public class MainActivity extends AppCompatActivity {
                 keyword = ((TextView)view).getText().toString();
 
                 mProgress = ProgressDialog.show(MainActivity.this, "Wait", "Search...");
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+
                 GeocodeThread thread = new GeocodeThread();
                 thread.start();
             }
@@ -243,18 +249,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // notify
                 if (results.count > 0) {
-                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                    for(int i = 0; i < filteredItemList.size(); i++){
-                        System.out.println(filteredItemList.get(i));
-                    }
-                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                     notifyDataSetChanged() ;
                 } else {
-                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    for(int i = 0; i < filteredItemList.size(); i++){
-                        System.out.println(filteredItemList.get(i));
-                    }
-                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     notifyDataSetInvalidated() ;
                 }
             }
@@ -271,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
             mProgress.dismiss();
             //위치초기화이루어져야함
             List<Double> result = (List<Double>) msg.obj;
-            System.out.println(result.get(0));
-            System.out.println(result.get(1));
+//            System.out.println(result.get(0));
+//            System.out.println(result.get(1));
             Toast.makeText(getBaseContext(), result.get(0) + ", "+result.get(1), Toast.LENGTH_SHORT).show();
 //            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(result.get(0), result.get(1)), true);
         }
