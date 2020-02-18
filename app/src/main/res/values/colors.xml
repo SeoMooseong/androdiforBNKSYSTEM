@@ -4,6 +4,7 @@
     <color name="BackColor">#F5F5F5</color>
     <color name="WhiteColor">#ffffff</color>
     <color name="FontDefaultColor">#7A7A7A</color>
+    <color name="PointColor2">#ffb371</color>
 </resources>
 
 

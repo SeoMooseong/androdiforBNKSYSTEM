@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.bnk.comapny.bnksys.model.Apartment;
+import com.bnk.comapny.bnksys.model.Lir;
+import com.bnk.comapny.bnksys.model.Pir;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.List;
 public class DataAdapter {
     protected static final String TAG = "DataAdapter";
     protected static final String TABLE_NAME="apartment";
+    protected static final String TABLE_NAMEP="pir";
+    protected static final String TABLE_NAMEL="lir";
 
     private final Context mContext;
     private SQLiteDatabase mDb;
@@ -94,4 +98,69 @@ public class DataAdapter {
             throw mSQLException;
         }
     }
+    public List getTableDataL(){
+        try{
+            String sql ="SELECT * FROM " + TABLE_NAMEL;
+
+            // 모델 넣을 리스트 생성
+            List lirlist = new ArrayList();
+
+            // TODO : 모델 선언
+            Lir lir = null;
+
+            Cursor mCur = mDb.rawQuery(sql, null);
+
+            if(mCur !=null)
+            {
+                while(mCur.moveToNext())
+                {
+                    lir = new Lir();
+                    lir.setlDay(mCur.getString(0));
+                    lir.setlNation(Float.parseFloat(mCur.getString(1)));
+                    lir.setlLocal(Float.parseFloat(mCur.getString(2)));
+
+                    lirlist.add(lir);
+                }
+            }
+            return lirlist;
+
+        }catch (SQLException mSQLException)
+        {
+            Log.e(TAG,"getTestData >>"+mSQLException.toString());
+            throw mSQLException;
+        }
+    }
+    public List getTableDataP(){
+        try{
+            String sql ="SELECT * FROM " + TABLE_NAMEP;
+
+            // 모델 넣을 리스트 생성
+            List pirlist = new ArrayList();
+
+            // TODO : 모델 선언
+            Pir pir = null;
+
+            Cursor mCur = mDb.rawQuery(sql, null);
+
+            if(mCur !=null)
+            {
+                while(mCur.moveToNext())
+                {
+                    pir = new Pir();
+                    pir.setpDay(mCur.getString(0));
+                    pir.setpNation(Float.parseFloat(mCur.getString(1)));
+                    pir.setpLocal(Float.parseFloat(mCur.getString(2)));
+
+                    pirlist.add(pir);
+                }
+            }
+            return pirlist;
+
+        }catch (SQLException mSQLException)
+        {
+            Log.e(TAG,"getTestData >>"+mSQLException.toString());
+            throw mSQLException;
+        }
+    }
+
 }
