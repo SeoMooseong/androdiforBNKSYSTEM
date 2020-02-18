@@ -1,7 +1,9 @@
 package com.bnk.comapny.bnksys;
 
 import android.content.Entity;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,7 +51,6 @@ public class FragmentHome extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
           homeview = inflater.inflate(R.layout.home,container,false);
           user = new User();
           userPanel(user);
