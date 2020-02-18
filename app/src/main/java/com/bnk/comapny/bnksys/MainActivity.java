@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
         mDbHelper.createDatabase();
         mDbHelper.open();
-        
+
         apartmentList = mDbHelper.getTableData();
         pirList = mDbHelper.getTableDataP();
         lirList=mDbHelper.getTableDataL();
