@@ -35,6 +35,8 @@ import android.widget.Toast;
 import com.bnk.comapny.bnksys.SQL.DataAdapter;
 import com.bnk.comapny.bnksys.SQL.MyDBHelper;
 import com.bnk.comapny.bnksys.model.Apartment;
+import com.bnk.comapny.bnksys.model.Lir;
+import com.bnk.comapny.bnksys.model.Pir;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,13 +65,14 @@ import org.w3c.dom.Text;
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
-    private MyDBHelper myDBHelper;
     private FragmentManager manager = getSupportFragmentManager();
     private FragmentHome home = new FragmentHome();
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
-    public List<Apartment> apartmentList;
+    public static List<Apartment> apartmentList;
+    public static List<Pir> pirList;
+    public static List<Lir> lirList;
 
     private String keyword; //검색키워드
 
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         mDbHelper.open();
 
         apartmentList = mDbHelper.getTableData();
+        pirList = mDbHelper.getTableDataP();
+        lirList=mDbHelper.getTableDataL();
         mDbHelper.close();
     }
     private SearchView search;

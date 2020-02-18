@@ -6,11 +6,12 @@
         android:icon="@drawable/ic_home"
         android:title="@string/item_home" />
     <item
-        android:id="@+id/analysis"
-        android:icon="@drawable/ic_trending"
-        android:title="@string/item_analysis" />
-    <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_map"
         android:title="@string/item_profile" />
+    <item
+        android:id="@+id/analysis"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/item_analysis" />
+
 </menu>
