@@ -1,16 +1,21 @@
 package com.bnk.comapny.bnksys;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -35,15 +40,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
+
 import androidx.annotation.Nullable;
 
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +73,16 @@ public class MainActivity extends AppCompatActivity {
 
     private String keyword; //검색키워드
 
+    private List<String> addressList;
+    private List<String> addressFakeList;
+
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+
+    private static final String [] LOCATION_PERMISSIONS = new String [] {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
     private  void initLoadDB(){
         DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
         mDbHelper.createDatabase();
@@ -73,10 +93,39 @@ public class MainActivity extends AppCompatActivity {
     }
     private SearchView search;
 
+    private List<String> convertList(List<Apartment> ori){
+        addressFakeList = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
+        Apartment apt = null;
+
+        for(int i = 0; i < ori.size(); i++){
+            apt = ori.get(i);
+            addressFakeList.add(apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName());
+            list.add(apt.getAddress() + " " +apt.getRoadress() + " " + apt.getName());
+        }
+
+        TreeSet<String> tmpList = new TreeSet<>(list);
+        addressList = new ArrayList<>(tmpList);
+        tmpList = new TreeSet<>(addressFakeList);
+        addressFakeList = new ArrayList<>(tmpList);
+
+        return addressList;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //권한확인
+        int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if(permission1 != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this, LOCATION_PERMISSIONS,
+                    PERMISSIONS_REQUEST_CODE);
+        }
+
         //DB관련
 
         //툴바관련
@@ -111,10 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
         //자동완성 관련
-        String data[]={"엘시티", "협화맨션", "센텀파크 1차", "해운대 힐스테이트", "해운대 래미안", "동부 올림픽타운", "해운대 자이1단지", "해운대 마린시티", "해운대 아이파크", "광안더샵"};
-
-        KeywordArrayAdapter<String> dataAdapter = new KeywordArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, data);
-//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, data);
+        KeywordArrayAdapter<String> dataAdapter = new KeywordArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, convertList(apartmentList));
 
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setDropDownAnchor(R.id.my_toolbar);
@@ -127,6 +173,13 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 keyword = ((TextView)view).getText().toString();
 
+                for(int i = 0; i < addressList.size(); i++){
+                    if(keyword.equals(addressList.get(i))){
+                        keyword = addressFakeList.get(i);
+                        break;
+                    }
+                }
+//                Toast.makeText(MainActivity.this, keyword, Toast.LENGTH_SHORT).show();
                 mProgress = ProgressDialog.show(MainActivity.this, "Wait", "Search...");
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -162,16 +215,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class KeywordArrayAdapter<String> extends ArrayAdapter<String> implements Filterable {
-        private String data[];
-        private ArrayList<String> filteredItemList = null;
+        private List<String> list = null;
+        private List<String> filteredItemList = null;
 
         Filter listFilter;
 
-        public KeywordArrayAdapter(@androidx.annotation.NonNull Context context, int resource, @androidx.annotation.NonNull String[] objects) {
+        public KeywordArrayAdapter(@androidx.annotation.NonNull Context context, int resource, @androidx.annotation.NonNull List<String> objects) {
             super(context, resource, objects);
-            data = Arrays.copyOf(objects, objects.length);
+            list = objects;
         }
-
 
         @androidx.annotation.NonNull
         @Override
@@ -188,6 +240,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
+            if(filteredItemList == null){
+                return 0;
+            }
             return filteredItemList.size();
         }
 
@@ -225,11 +280,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults() ;
-                ArrayList<String> itemList = new ArrayList<>() ;
-                if(data != null && constraint != null){
-                    for(int i = 0; i < data.length; i++){
-                        if(data[i].toString().contains(constraint)){
-                            itemList.add(data[i]);
+                List<String> itemList = new ArrayList<>() ;
+                if(list != null && constraint != null){
+                    for(int i = 0; i < list.size(); i++){
+                        if(list.get(i).toString().contains(constraint)){
+                            itemList.add(list.get(i));
                         }
                     }
                     results.values = itemList;
@@ -242,12 +297,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                // update listview by filtered data list.
                 filteredItemList = (ArrayList<String>) results.values ;
                 if(filteredItemList == null) return;
 
-
-                // notify
                 if (results.count > 0) {
                     notifyDataSetChanged() ;
                 } else {
@@ -265,24 +317,29 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             mProgress.dismiss();
-            //위치초기화이루어져야함
-            List<Double> result = (List<Double>) msg.obj;
-//            System.out.println(result.get(0));
-//            System.out.println(result.get(1));
-            Toast.makeText(getBaseContext(), result.get(0) + ", "+result.get(1), Toast.LENGTH_SHORT).show();
-//            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(result.get(0), result.get(1)), true);
+
+            List<String> result = (List<String>) msg.obj;
+            Toast.makeText(MainActivity.this, result.get(0) + ", " + result.get(1), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+
+            intent.putExtra("mapX", result.get(0));
+            intent.putExtra("mapY", result.get(1));
+            intent.putExtra("address", result.get(2));
+            startActivity(intent);
         }
     };
 
     class GeocodeThread extends Thread {
         @Override
         public void run() {
-            try {
-                URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json?query=" + keyword);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            List<Double> result = getGeocode();
+            List<Double> geoCode = getGeocode();
+
+            List<String> result = new ArrayList<>();
+
+            result.add(geoCode.get(0)+"");
+            result.add(geoCode.get(1)+"");
+            result.add(keyword);
+
             Message message = mAfterDown.obtainMessage();
             message.obj = result;
             mAfterDown.sendMessage(message);
@@ -292,8 +349,14 @@ public class MainActivity extends AppCompatActivity {
             List<Double> result = new ArrayList<>();
 
             try {
+                System.out.println(keyword);
+                String tmpKeyword = keyword;
+                int idx = keyword.indexOf(" @");
+                keyword = keyword.substring(0, idx);
+                keyword = keyword.replace("$", "");
+                System.out.println(keyword);
                 StringBuilder data = new StringBuilder();
-                URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json?query="
+                URL url = new URL("https://dapi.kakao.com/v2/local/search/address.json?query="
                         + URLEncoder.encode(keyword, "UTF-8"));
 
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -314,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 conn.disconnect();
 
                 result = getCode(data.toString());
-
+                keyword = tmpKeyword;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (UnsupportedEncodingException e) {
@@ -333,11 +396,9 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray objects = reader.getJSONArray("documents");
                 for(int i = 0; i < objects.length(); i++){
                     JSONObject object = objects.getJSONObject(i);
-                    if(object.getString("category_name").equals("부동산 > 주거시설 > 아파트")){
-                        result.add(Double.parseDouble(object.getString("y")));
-                        result.add(Double.parseDouble(object.getString("x")));
-                        break;
-                    }
+                    result.add(Double.parseDouble(object.getString("y")));
+                    result.add(Double.parseDouble(object.getString("x")));
+                    break;
                 }
 
             } catch (JSONException e) {

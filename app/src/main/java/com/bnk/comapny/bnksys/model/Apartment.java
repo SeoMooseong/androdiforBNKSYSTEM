@@ -12,6 +12,7 @@ public class Apartment {
     String ContractYM; //계약년월
     String ContractD; //계약일
     String BuildYear;
+    //address+roadress+name 시군구+도로명+아파트명
 
     public Apartment() {
         this.name = "";
