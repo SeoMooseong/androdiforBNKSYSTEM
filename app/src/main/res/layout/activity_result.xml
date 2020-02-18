@@ -12,9 +12,11 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_centerHorizontal="false"></net.daum.mf.map.api.MapView>
-    <LinearLayout
+    <ListView
+        android:id="@+id/result_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="1"></LinearLayout>
+        android:layout_weight="1">
+    </ListView>
 </LinearLayout>

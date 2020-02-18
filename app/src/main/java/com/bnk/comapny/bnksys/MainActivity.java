@@ -33,8 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bnk.comapny.bnksys.SQL.DataAdapter;
-import com.bnk.comapny.bnksys.SQL.MyDBHelper;
 import com.bnk.comapny.bnksys.model.Apartment;
+import com.bnk.comapny.bnksys.model.ApartmentList;
 import com.bnk.comapny.bnksys.model.Lir;
 import com.bnk.comapny.bnksys.model.Pir;
 
@@ -42,25 +42,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
 import androidx.annotation.Nullable;
 
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -73,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<Apartment> apartmentList;
     public static List<Pir> pirList;
     public static List<Lir> lirList;
+    public static List<ApartmentList> aptAdressList;
 
     private String keyword; //검색키워드
 
@@ -95,6 +89,36 @@ public class MainActivity extends AppCompatActivity {
         pirList = mDbHelper.getTableDataP();
         lirList=mDbHelper.getTableDataL();
         mDbHelper.close();
+
+        aptAdressList = new ArrayList<>();
+
+        String tmp;
+        List<Apartment> tmpArr;
+        boolean check = false;
+        for(int i = 0; i < apartmentList.size(); i++){
+            tmp = apartmentList.get(i).getAddress() + " " + apartmentList.get(i).getRoadress() + " " + apartmentList.get(i).getName();
+            for(int j = 0; j < aptAdressList.size(); j++){
+                if(tmp.equals(aptAdressList.get(j).getAddress())){
+
+                    tmpArr = aptAdressList.get(j).getList();
+                    tmpArr.add(apartmentList.get(i));
+                    aptAdressList.get(j).setList(tmpArr);
+                    check = true;
+                    if(apartmentList.get(i).getName().contains("엘시티")){
+                        System.out.println(aptAdressList.get(i).getList().size());
+                    }
+                    break;
+                }
+            }
+            if(!check){
+                ApartmentList apt = new ApartmentList(tmp, new ArrayList<Apartment>());
+                apt.getList().add(apartmentList.get(i));
+                aptAdressList.add(apt);
+            }else{
+                check = false;
+            }
+        }
+
     }
     private SearchView search;
 
