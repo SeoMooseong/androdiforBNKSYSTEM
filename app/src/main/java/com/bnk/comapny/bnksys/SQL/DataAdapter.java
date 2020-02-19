@@ -130,6 +130,54 @@ public class DataAdapter {
             throw mSQLException;
         }
     }
+    public List getTableDateW(String LOCATION){
+        try{
+
+            String sql ="select * " +
+                        "from (select address, Bunji, name, sizeM, contractYM, ContractD, min(tPayout) as payout, floor, BuildYear, roadress, sizeP " +
+                              "from (select address, Bunji, name, sizeM, contractYM, ContractD, Cast(Replace(payout,\",\",\"\") as int) tPayout, floor, BuildYear, roadress, sizeP, address || roadress || sizeP as filter " +
+                                    "from apartment " +
+                                    "order by filter, payout) " +
+                              "group by filter) " +
+                         "where address like '%"+LOCATION+"%' order by payout asc";
+//            String sql = "select * from apartment";
+            System.out.println("sql 문 : "+sql);
+            // 모델 넣을 리스트 생성
+            List apartlist = new ArrayList();
+
+            // TODO : 모델 선언
+            Apartment apartment = null;
+
+            Cursor mCur = mDb.rawQuery(sql, null);
+
+            if(mCur !=null)
+            {
+                while(mCur.moveToNext())
+                {
+                    apartment = new Apartment();
+                    apartment.setAddress(mCur.getString(0));
+                    apartment.setBunji(mCur.getString(1));
+                    apartment.setName(mCur.getString(2));
+                    apartment.setSizeM(Float.parseFloat(mCur.getString(3)));
+                    apartment.setContractYM(mCur.getString(4));
+                    apartment.setContractD(mCur.getString(5));
+                    apartment.setPayout(Integer.parseInt(mCur.getString(6).replace(",","")));
+                    apartment.setFloor(Integer.parseInt(mCur.getString(7)));
+                    apartment.setBuildYear(mCur.getString(8));
+                    apartment.setRoadress(mCur.getString(9));
+                    apartment.setSizeP(Integer.parseInt(mCur.getString(10)));
+                    System.out.println(apartment.toString()+"");
+                    apartlist.add(apartment);
+                }
+            }
+            return apartlist;
+
+        }catch (SQLException mSQLException)
+        {
+            Log.e(TAG,"getTestData >>"+mSQLException.toString());
+            throw mSQLException;
+        }
+    }
     public List getTableDataP(){
         try{
             String sql ="SELECT * FROM " + TABLE_NAMEP;

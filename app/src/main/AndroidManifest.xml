@@ -22,7 +22,6 @@
             </intent-filter></activity>
         <activity android:name=".StartActivity">
         </activity>
-        <activity android:name=".list_item" />
         <activity android:name=".ResultActivity" />
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".SearchResultsActivity">

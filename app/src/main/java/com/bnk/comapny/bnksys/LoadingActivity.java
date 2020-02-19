@@ -86,5 +86,6 @@ public class LoadingActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(),StartActivity.class);
         startActivity(intent);
+        finish();
     }
 }

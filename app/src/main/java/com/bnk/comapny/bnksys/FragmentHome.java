@@ -12,8 +12,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bnk.comapny.bnksys.model.ApartRecommand;
+import com.bnk.comapny.bnksys.model.Apartment;
+import com.bnk.comapny.bnksys.model.ApartmentList;
 import com.bnk.comapny.bnksys.model.Pir;
 import com.bnk.comapny.bnksys.model.User;
 import com.github.mikephil.charting.animation.Easing;
@@ -41,12 +45,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentHome extends Fragment {
-    PieChart pieChart;
+//    PieChart pieChart;
     LineChart lineChart;
     View homeview;
     TextView salarytext;
     TextView pirtext;
     TextView lirtext;
+    TextView fieldtext;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,18 +65,34 @@ public class FragmentHome extends Fragment {
     public void userPanel(User user){
         salarytext = homeview.findViewById(R.id.salarym);
         int salaryY = (user.getSalaryM()*12)/10000;
-        salarytext.setText(salaryY+"만원");
-
+        String temps = salaryY+"";
+        if(temps.length()>4) {
+            salarytext.setText(temps.substring(0, temps.length() - 4) + "억" + temps.substring((temps.length() - 4), temps.length()) + "만원");
+        }else{
+            salarytext.setText(temps+"만원");
+        }
         pirtext = homeview.findViewById(R.id.pirm);
-
         float pirRecently = LoadingActivity.pirList.get(LoadingActivity.pirList.size()-1).getpLocal();
         double pirM = salaryY*pirRecently;
-        pirtext.setText(Math.round(pirM)+"만원");
+        String tempp = Math.round(pirM)+"";
+        if(tempp.length()>4) {
+            pirtext.setText(tempp.substring(0, tempp.length() - 4) + "억" + tempp.substring((tempp.length() - 4), tempp.length()) + "만원");
+        }else
+        {
+            pirtext.setText(tempp+"만원");
+        }
         lirtext = homeview.findViewById(R.id.lirm);
-
         float lirRecently = LoadingActivity.lirList.get(LoadingActivity.lirList.size()-1).getlLocal();
         double lirM = salaryY*lirRecently;
-        lirtext.setText(Math.round(lirM)+"만원");
+        String templ= Math.round(lirM)+"";
+        if(templ.length()>4) {
+            lirtext.setText(templ.substring(0, templ.length() - 4) + "억" + templ.substring((templ.length() - 4), templ.length()) + "만원");
+        }else
+        {
+            lirtext.setText(templ+"만원");
+        }
+        fieldtext = homeview.findViewById(R.id.fieldm);
+        fieldtext.setText(user.getField());
     }
     public void chartPIRLIR(){
         lineChart = (LineChart)homeview.findViewById(R.id.pirlir);

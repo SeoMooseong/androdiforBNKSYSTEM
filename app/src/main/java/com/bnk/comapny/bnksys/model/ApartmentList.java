@@ -1,7 +1,7 @@
 package com.bnk.comapny.bnksys.model;
 
 import java.util.List;
-
+//주소, 집이름, 평수, 가격
 public class ApartmentList {
     String address;
     List<Apartment> list;

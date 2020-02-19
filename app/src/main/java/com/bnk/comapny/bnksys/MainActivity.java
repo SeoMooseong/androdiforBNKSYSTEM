@@ -1,6 +1,7 @@
 package com.bnk.comapny.bnksys;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -93,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        int i=0;
+        for(Apartment ap : StartActivity.recommandList)
+        {
+            System.out.println(ap.getName()+" "+(i++)+"번쨰");
+        }
 
         //툴바관련
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -121,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
+
         searchView.setQueryHint("아파트 명을 입력해주세요");
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));

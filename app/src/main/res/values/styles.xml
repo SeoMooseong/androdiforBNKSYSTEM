@@ -7,7 +7,7 @@
     </style>
     <style name="ActionBars_title"
         parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/WhiteColor</item>
+        <item name="android:textColor">@color/PointColor</item>
     </style>
     <style name="navigationView">
         <item name="android:background">@color/WhiteColor</item>
