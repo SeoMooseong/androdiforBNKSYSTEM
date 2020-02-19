@@ -6,4 +6,5 @@
     <string name="item_profile">지도</string>
     <string name="search_title">검색</string>
     <string name="search_hint">아파트명을 검색해주세요</string>
+    <string name="main_field_dialog_title">선호 지역</string>
 </resources>
