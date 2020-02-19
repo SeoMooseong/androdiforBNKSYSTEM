@@ -1,5 +1,8 @@
 package com.bnk.comapny.bnksys;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Entity;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +56,8 @@ public class FragmentHome extends Fragment {
     TextView pirtext;
     TextView lirtext;
     TextView fieldtext;
+    CardView fieldCard;
+    String[] fields;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,6 +99,25 @@ public class FragmentHome extends Fragment {
         }
         fieldtext = homeview.findViewById(R.id.fieldm);
         fieldtext.setText(user.getField());
+
+        fieldCard = homeview.findViewById(R.id.user_card_feild);
+        fields = getResources().getStringArray(R.array.my_array);
+        fieldCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(getResources().getString(R.string.main_field_dialog_title));
+
+                builder.setItems(fields, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        fieldtext.setText(fields[which]);
+                    }
+                });
+                builder.show();
+            }
+        });
     }
     public void chartPIRLIR(){
         lineChart = (LineChart)homeview.findViewById(R.id.pirlir);
