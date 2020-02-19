@@ -52,4 +52,30 @@
         android:layout_weight="1"
         android:divider="@color/BackColor">
     </ListView>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:cardCornerRadius="3dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/result_graph_filter"
+                android:entries="@array/my_array"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="13sp"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/result_graph"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                ></com.github.mikephil.charting.charts.LineChart>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
