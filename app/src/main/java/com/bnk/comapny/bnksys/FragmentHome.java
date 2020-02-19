@@ -1,12 +1,12 @@
 package com.bnk.comapny.bnksys;
 
+import android.content.Context;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Entity;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,36 +16,26 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bnk.comapny.bnksys.model.ApartRecommand;
 import com.bnk.comapny.bnksys.model.Apartment;
-import com.bnk.comapny.bnksys.model.ApartmentList;
 import com.bnk.comapny.bnksys.model.Pir;
 import com.bnk.comapny.bnksys.model.User;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class FragmentHome extends Fragment {
@@ -56,13 +46,18 @@ public class FragmentHome extends Fragment {
     TextView pirtext;
     TextView lirtext;
     TextView fieldtext;
+    private double pirM;
+    private double lirM;
+    private int salaryY;
     CardView fieldCard;
     String[] fields;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
           homeview = inflater.inflate(R.layout.home,container,false);
-
+          ListView listView = homeview.findViewById(R.id.list_page);
+          recAdapter recadapter = new recAdapter(getActivity(),R.id.list_page,StartActivity.recommandList);
+          listView.setAdapter(recadapter);
           userPanel(StartActivity.user);
 //          chartMoney(StartActivity.user);
           chartPIRLIR();
@@ -70,7 +65,7 @@ public class FragmentHome extends Fragment {
     }
     public void userPanel(User user){
         salarytext = homeview.findViewById(R.id.salarym);
-        int salaryY = (user.getSalaryM()*12)/10000;
+        salaryY = (user.getSalaryM()*12)/10000;
         String temps = salaryY+"";
         if(temps.length()>4) {
             salarytext.setText(temps.substring(0, temps.length() - 4) + "억" + temps.substring((temps.length() - 4), temps.length()) + "만원");
@@ -79,7 +74,7 @@ public class FragmentHome extends Fragment {
         }
         pirtext = homeview.findViewById(R.id.pirm);
         float pirRecently = LoadingActivity.pirList.get(LoadingActivity.pirList.size()-1).getpLocal();
-        double pirM = salaryY*pirRecently;
+        pirM = salaryY*pirRecently;
         String tempp = Math.round(pirM)+"";
         if(tempp.length()>4) {
             pirtext.setText(tempp.substring(0, tempp.length() - 4) + "억" + tempp.substring((tempp.length() - 4), tempp.length()) + "만원");
@@ -89,7 +84,7 @@ public class FragmentHome extends Fragment {
         }
         lirtext = homeview.findViewById(R.id.lirm);
         float lirRecently = LoadingActivity.lirList.get(LoadingActivity.lirList.size()-1).getlLocal();
-        double lirM = salaryY*lirRecently;
+        lirM = salaryY*lirRecently;
         String templ= Math.round(lirM)+"";
         if(templ.length()>4) {
             lirtext.setText(templ.substring(0, templ.length() - 4) + "억" + templ.substring((templ.length() - 4), templ.length()) + "만원");
@@ -222,4 +217,143 @@ public class FragmentHome extends Fragment {
 //        pieChart.setData(data);
 //
 //    }
+
+    public class recAdapter extends ArrayAdapter<Apartment>{
+        private Context context;
+        private List<Apartment> list;
+        private List<Apartment> temp;
+        private LayoutInflater inflater =null;
+
+        public recAdapter(@NonNull Context context, int resource, @NonNull List<Apartment> list) {
+            super(context, resource, list);
+            this.context = context;
+            this.list = list;
+            Collections.sort(this.list, new Comparator<Apartment>() {
+                @Override
+                public int compare(Apartment s1, Apartment s2) {
+                    if (s1.getName().compareTo(s2.getName())>0){
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+
+
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Nullable
+        @Override
+        public Apartment getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public class ViewHolder{
+            public TextView uname;
+            public TextView upayout;
+            public TextView usizeP;
+            public TextView ucheck;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View row = convertView;
+            ViewHolder holder;
+
+            if(row ==null)
+            {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                row = layoutInflater.inflate(R.layout.recommand_list_item,parent,false);
+
+                holder = new ViewHolder();
+                holder.uname = (TextView)row.findViewById(R.id.apartnameuser);
+                holder.upayout=(TextView)row.findViewById(R.id.payoutuser);
+                holder.usizeP=(TextView)row.findViewById(R.id.sizePuser);
+                holder.ucheck=(TextView)row.findViewById(R.id.checking);
+                row.setTag(holder);
+
+            }else{
+                holder = (ViewHolder)row.getTag();
+            }
+
+            String Tag = row.getTag().toString();
+            int idx= Tag.indexOf("@");
+            String tag = Tag.substring(idx+1);
+
+            Apartment apt = (Apartment) list.get(position);
+            double maxMoney = lirM;//만단위
+            double maxPMoney = pirM;//만단위
+            //apt.getPayout->만단위
+            //StartActivty.user.getMoney->일단위
+            System.out.println(StartActivity.user.getMoney()+"단위머고");
+            Drawable img = getContext().getResources().getDrawable( R.drawable.ic_home );
+            if(StartActivity.user.getMoney()>=apt.getPayout()*10000)
+            { //보유한돈>=집값
+                holder.ucheck.setText("재산대비 적합한 집");
+                holder.ucheck.setCompoundDrawablesWithIntrinsicBounds(null,null,img,null);
+                holder.ucheck.setTextColor(Color.rgb(0,255,0));
+            }else
+            {//보유한돈<집값
+               double lost= (apt.getPayout()*10000)-StartActivity.user.getMoney();
+               if(lost<=maxMoney*10000)//차액이 대출액보다 작을때 9500<=100000
+               {//집값 - 유저돈 = 필요한돈 <= 최대대출액
+                   if(apt.getPayout()>maxPMoney) // 매매가>연봉대비 평균 집값
+                   {
+                       holder.ucheck.setText("집값이 너무 비쌈");
+                       holder.ucheck.setCompoundDrawablesWithIntrinsicBounds(null,null,img,null);
+                       holder.ucheck.setTextColor(Color.rgb(255,0,0));
+                       // (부산평균)대출금/연봉*0.9~(부산평균)대출금/연봉*1.1 사이에 집값-내돈이 있을때
+                       //아파트 집값이 적절한집값보다 비싸다
+                        //연봉에 비해서 집값이 너무 비쌉니다
+                   }
+                   else
+                   {
+                       holder.ucheck.setText("연봉에 적합한 집");
+                       holder.ucheck.setCompoundDrawablesWithIntrinsicBounds(null,null,img,null);
+                       holder.ucheck.setTextColor(Color.rgb(0,255,0));
+                       // (부산평균)대출금/연봉*0.9~(부산평균)대출금/연봉*1.1 사이에 집값-내돈이 있을때
+                       //아파트 집값이 적절한집값보다 싸다
+                       //연봉에 적절한 집값입니다.
+                   }
+               }
+               else
+               {
+
+                   // (부산평균)대출금/연봉*0.9~(부산평균)대출금/연봉*1.1 사이에 집값-내돈이 없을때
+                   //지나친 대출을 받야아합니다.
+                   holder.ucheck.setText("지나친 대출을 요구함");
+                   holder.ucheck.setCompoundDrawablesWithIntrinsicBounds(null,null,img,null);
+                   holder.ucheck.setTextColor(Color.rgb(255,0,0));
+               }
+
+            }
+
+            holder.uname.setText(apt.getName());
+            holder.usizeP.setText("평수 : "+apt.getSizeP()+"평("+apt.getSizeM()+")");
+            String temp = apt.getPayout()+"";
+            if(temp.length() > 4){
+                String billion = temp.substring(0, (temp.length() - 4));
+                String million = temp.substring((temp.length() - 4));
+                while(million.length() != 0 && million.charAt(0) == '0'){
+                    million = million.replaceFirst("0", "");
+                }
+                temp = billion + "억 " + million;
+            }
+            holder.upayout.setText("매매금액 : "+temp);
+
+            return row;
+        }
+    }
 }

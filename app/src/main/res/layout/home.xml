@@ -5,213 +5,228 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/PointColor"
+            android:gravity="center"
+            android:text="부산 평균 PIR(집값/연봉) LIR(대출금/연봉)"
+            android:textColor="@color/WhiteColor"
+            android:textSize="14sp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="3dp"
+            app:cardCornerRadius="3dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/pirlir"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.github.mikephil.charting.charts.LineChart>
+        </android.support.v7.widget.CardView>
+        <!--            <TextView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginTop="5dp"-->
+        <!--                android:layout_marginLeft="8dp"-->
+        <!--                android:layout_marginRight="8dp"-->
+        <!--                android:background="@color/PointColor"-->
+        <!--                android:text="월급 대출 비율"-->
+        <!--                android:textSize="14sp"-->
+        <!--                android:textColor="@color/WhiteColor"-->
+        <!--                />-->
+        <!--            <android.support.v7.widget.CardView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="210dp"-->
+        <!--                android:layout_marginLeft="8dp"-->
+        <!--                android:layout_marginRight="8dp"-->
+        <!--                app:cardCornerRadius="3dp">-->
+
+        <!--                <com.github.mikephil.charting.charts.PieChart-->
+        <!--                    android:id="@+id/money"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.PieChart>-->
+        <!--            </android.support.v7.widget.CardView>-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:text="부산 평균 PIR(집값/연봉) LIR(대출금/연봉)"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/WhiteColor"
-                android:background="@color/PointColor"
-                />
+            android:layout_height="100dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="8dp"
+            android:orientation="horizontal">
+
             <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginBottom="3dp"
-                android:layout_marginLeft="8dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
                 android:layout_marginRight="8dp"
-                android:layout_weight="2"
+                android:layout_marginBottom="1dp"
+                android:layout_weight="1"
                 app:cardCornerRadius="3dp">
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/pirlir"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.LineChart>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/PointColor"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:text="연봉"
+                        android:textColor="@color/WhiteColor"
+                        android:textSize="12sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_money" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/salarym"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
             </android.support.v7.widget.CardView>
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginLeft="8dp"-->
-<!--                android:layout_marginRight="8dp"-->
-<!--                android:background="@color/PointColor"-->
-<!--                android:text="월급 대출 비율"-->
-<!--                android:textSize="14sp"-->
-<!--                android:textColor="@color/WhiteColor"-->
-<!--                />-->
-<!--            <android.support.v7.widget.CardView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="210dp"-->
-<!--                android:layout_marginLeft="8dp"-->
-<!--                android:layout_marginRight="8dp"-->
-<!--                app:cardCornerRadius="3dp">-->
 
-<!--                <com.github.mikephil.charting.charts.PieChart-->
-<!--                    android:id="@+id/money"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.PieChart>-->
-<!--            </android.support.v7.widget.CardView>-->
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="3dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/PointColor"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:text="적정 평균 집값"
+                        android:textColor="@color/WhiteColor"
+                        android:textSize="12sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_house" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/pirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="8dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/PointColor"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:text="적정 대출 금액"
+                        android:textColor="@color/WhiteColor"
+                        android:textSize="12sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_bank" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/lirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="8dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="3dp">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="3dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/PointColor"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:text="연봉"
-                            android:textColor="@color/WhiteColor"
-                            android:textSize="12sp" />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/imageView"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="10dp"
-                                app:srcCompat="@drawable/ic_money" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/salarym"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:textSize="15sp" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="3dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/PointColor"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:text="적정 평균 집값"
-                            android:textColor="@color/WhiteColor"
-                            android:textSize="12sp" />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/imageView2"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="10dp"
-                                app:srcCompat="@drawable/ic_house" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/pirm"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="8dp"
-                android:orientation="horizontal">
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="3dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/PointColor"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:text="적정 대출 금액"
-                            android:textColor="@color/WhiteColor"
-                            android:textSize="12sp" />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/imageView3"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="10dp"
-                                app:srcCompat="@drawable/ic_bank" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/lirm"
-                            android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:paddingBottom="1dp"
@@ -223,55 +238,60 @@
                     android:id="@+id/user_card_feild"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="3dp">
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:background="@color/PointColor"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:text="선호 지역"
+                        android:textColor="@color/WhiteColor"
+                        android:textSize="12sp" />
 
-                        <TextView
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView4"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/PointColor"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:text="선호 지역"
-                            android:textColor="@color/WhiteColor"
-                            android:textSize="12sp" />
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_local" />
+                    </FrameLayout>
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/imageView4"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="10dp"
-                                app:srcCompat="@drawable/ic_local" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/fieldm"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:paddingBottom="1dp"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/list_page"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
+                    <TextView
+                        android:id="@+id/fieldm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="1dp"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/PointColor"
+            android:gravity="center"
+            android:text="선호지역 아파트 리스트"
+            android:textColor="@color/WhiteColor"
+            android:textSize="14sp" />
+        <ListView
+            android:id="@+id/list_page"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            ></ListView>
+    </LinearLayout>
 </LinearLayout>

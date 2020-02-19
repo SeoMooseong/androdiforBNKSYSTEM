@@ -18,14 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="회원 정보를 입력해주세요"
+            android:text="나에게 맞는 아파트를 찾기 위한\n 정보를 입력해주세요"
             android:gravity="center"
             />
 
         <TextView
             android:layout_marginTop="25dp"
             android:id="@+id/textView3"
-            android:textSize="10sp"
+            android:textSize="13sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="이름" />
@@ -41,7 +41,7 @@
         <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/textView4"
-            android:textSize="10sp"
+            android:textSize="13sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="월 실수령액" />
@@ -57,7 +57,7 @@
         <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/textView6"
-            android:textSize="10sp"
+            android:textSize="13sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="보유 자산" />
@@ -74,10 +74,10 @@
         <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/textView5"
-            android:textSize="10sp"
+            android:textSize="13sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="지역구" />
+            android:text="선호지역" />
 
         <Spinner
             android:id="@+id/like"
@@ -91,7 +91,7 @@
             android:id="@+id/loginbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="아파트 찾기"
             android:textColor="@color/WhiteColor"
             android:background="@drawable/btn_color"
             />
