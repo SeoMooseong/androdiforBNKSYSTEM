@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/PointColor"
+    android:backgroundTint="@color/PointColor"
     tools:context=".LoadingActivity">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/WhiteColor"
         android:layout_gravity="center"
-        android:text="@string/app_name" />
+        android:text="@string/app_name"
+        android:textColor="@color/PointColor"
+        android:textSize="20sp" />
 </FrameLayout>

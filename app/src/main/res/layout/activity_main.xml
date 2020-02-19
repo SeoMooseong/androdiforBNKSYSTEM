@@ -11,9 +11,11 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/PointColor"
+        android:background="@color/WhiteColor"
         android:elevation="0dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        app:titleTextColor="@color/PointColor"
+        app:subtitleTextColor="@color/PointColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <FrameLayout
         android:id="@+id/frameLayout"

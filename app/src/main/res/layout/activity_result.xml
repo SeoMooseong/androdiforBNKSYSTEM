@@ -6,17 +6,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ResultActivity">
-    <net.daum.mf.map.api.MapView
-        android:id="@+id/result_map_view"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_centerHorizontal="false"></net.daum.mf.map.api.MapView>
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/PointColor"
+        android:text="아파트 위치"
+        android:textColor="@color/WhiteColor"
+        android:gravity="center"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:cardCornerRadius="5dp">
+        <net.daum.mf.map.api.MapView
+            android:id="@+id/result_map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="false"></net.daum.mf.map.api.MapView>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="-3dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/PointColor"
+        android:text="아파트 실거래가"
+        android:textColor="@color/WhiteColor"
+        android:gravity="center"
+
+        />
     <ListView
         android:id="@+id/result_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:divider="@color/BackColor">
     </ListView>
 </LinearLayout>

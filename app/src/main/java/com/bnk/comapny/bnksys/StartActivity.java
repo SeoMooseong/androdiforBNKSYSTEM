@@ -9,7 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.bnk.comapny.bnksys.SQL.DataAdapter;
+import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.User;
+
+import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
     Button button;
@@ -18,6 +22,14 @@ public class StartActivity extends AppCompatActivity {
     EditText usermoney;
     String userField;
     public static User user;
+    public static List<Apartment> recommandList;
+    private void initLoadDB(User user){
+        DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
+        mDbHelper.open();
+        System.out.println("지역구 들어옴 : "+user.getField());
+        recommandList = mDbHelper.getTableDateW(user.getField());
+        mDbHelper.close();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +72,7 @@ public class StartActivity extends AppCompatActivity {
                 }
                 else{
                     user = new User(username.getText()+"",Integer.parseInt(usersalary.getText()+""),Integer.parseInt(usermoney.getText()+""),userField);
+                    initLoadDB(user);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                     finish();

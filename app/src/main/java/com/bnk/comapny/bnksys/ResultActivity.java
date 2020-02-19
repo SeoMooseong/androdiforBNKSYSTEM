@@ -161,13 +161,13 @@ public class ResultActivity extends AppCompatActivity {
 
 
             holder.name.setText(apt.getName());
-            holder.size.setText(apt.getSizeP() + "평(" + apt.getSizeM() + ")");
-            holder.floor.setText(apt.getFloor() + "층");
+            holder.size.setText("평수 : "+apt.getSizeP() + "평(" + apt.getSizeM() + ")");
+            holder.floor.setText("층수 : " + apt.getFloor() + "층");
             String tmp = apt.getContractD();
             if(tmp.length() <= 1){
                 tmp = "0" + tmp;
             }
-            holder.date.setText(apt.getContractYM() + tmp);
+            holder.date.setText("계약일자 : "+apt.getContractYM() + tmp);
             tmp = apt.getPayout() + "";
             if(tmp.length() > 4){
                 String billion = tmp.substring(0, (tmp.length() - 4));
@@ -177,7 +177,7 @@ public class ResultActivity extends AppCompatActivity {
                 }
                 tmp = billion + "억 " + million;
             }
-            holder.payout.setText(tmp);
+            holder.payout.setText("매매금액 : " +tmp);
 
             return row;
         }
