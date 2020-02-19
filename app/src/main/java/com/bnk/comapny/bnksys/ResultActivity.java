@@ -3,12 +3,14 @@ package com.bnk.comapny.bnksys;
 import android.content.Context;
 import android.content.Entity;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -21,8 +23,14 @@ import androidx.annotation.Nullable;
 import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.ApartmentList;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -40,21 +48,38 @@ public class ResultActivity extends AppCompatActivity {
     ListView listView;
     LineChart lineChart;
 
+    String address;
+
     ApartmentList tmpAptList;
     Apartment tmpApt;
+    List<Apartment> aptList;
+    List<List<Deal>> dealList;
+
+    final int numData = 5;
+    ArrayList<Entry> values1;
+    List<Deal> dataList;
+
+    int nodeCnt;
+    String[] quarters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        showMap();
+        showList();
+        showChart();
+    }
+
+    private void showMap(){
         //지도 관련..
         Intent intent = getIntent();
 
         Double mapX = Double.parseDouble(intent.getStringExtra("mapX"));
         Double mapY = Double.parseDouble(intent.getStringExtra("mapY"));
 
-        String address = intent.getStringExtra("address");
+        address = intent.getStringExtra("address");
         int idx = address.indexOf("@");
         String aptName = address.substring(idx + 1);
 
@@ -69,13 +94,14 @@ public class ResultActivity extends AppCompatActivity {
         marker.setTag(0);
         marker.setMarkerType(MapPOIItem.MarkerType.RedPin);
         mapView.addPOIItem(marker);
+    }
 
-
+    private void showList(){
         //리스트 관련..
         address = address.replace("$", "");
         address = address.replace("@", "");
 
-        List<Apartment> aptList = null;
+
         for(int i = 0; i < LoadingActivity.aptAdressList.size(); i++){
             tmpAptList = LoadingActivity.aptAdressList.get(i);
             if(tmpAptList.getAddress().equals(address)){
@@ -87,11 +113,10 @@ public class ResultActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.result_list);
         AptAdapter aptAdapter = new AptAdapter(this, R.id.result_list, aptList);
         listView.setAdapter(aptAdapter);
+    }
 
+    private void showChart(){
         //그래프 관련..
-        lineChart = (LineChart) findViewById(R.id.result_graph);
-        ArrayList<Entity> values = new ArrayList<>();
-
         HashSet<Integer> sizeSet = new HashSet(); //평수List
         for(int i = 0; i < aptList.size(); i++){
             sizeSet.add(aptList.get(i).getSizeP());
@@ -104,7 +129,7 @@ public class ResultActivity extends AppCompatActivity {
         Spinner filter = findViewById(R.id.result_graph_filter);
         filter.setAdapter(adapter); //평수List를 Spinner 목록에 등록
 
-        List<List<Deal>> dealList = new ArrayList<>(); //평수별 Apartment 정보 list
+        dealList = new ArrayList<>(); //평수별 Apartment 정보 list
         for(int i = 0; i < sizeList.size(); i++){
             dealList.add(new ArrayList<Deal>());
         }
@@ -119,16 +144,77 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
-        int numData = 5;
+        filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                drawChart(position);
+            }
 
-        for(int i = 0; i < numData; i++){
-        }
-
-//        LineDataSet dataSet = new LineDataSet()
-
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                drawChart(0);
+            }
+        });
     }
 
-    public class Deal implements Comparable {
+    private void drawChart(int index){
+        lineChart = (LineChart) findViewById(R.id.result_graph);
+        values1 = new ArrayList<>();
+
+        dataList = dealList.get(index);
+        Collections.sort(dataList);
+        Entry entry = null;
+
+        nodeCnt = numData > dataList.size() ? dataList.size() : numData; //numData or dataList.size 중 작은 것을 기준으로 설정
+        for(int i = nodeCnt; i > 0; i--){
+            entry = new Entry(nodeCnt - i, dataList.get(dataList.size() - i).payout);
+            values1.add(entry);
+        }
+
+        LineDataSet dataSet = new LineDataSet(values1, "매매"); //LineDataSet 선언
+        dataSet.setColor(ContextCompat.getColor(this, R.color.PointColor)); //LineChart에서 Line Color 설정
+        dataSet.setCircleColor(ContextCompat.getColor(this,R.color.PointColor)); // LineChart에서 Line Circle Color 설정
+        dataSet.setCircleHoleColor(ContextCompat.getColor(this,R.color.PointColor)); // LineChart에서 Line Hole Circle Color 설정
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+        List<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(dataSet);
+
+        quarters = new String[nodeCnt];
+
+        int size = 0;
+        for(int i = nodeCnt; i > 0; i--){
+            quarters[size++] = dataList.get(dataList.size() - i).getDate();
+        }
+
+        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(){
+            @Override
+            public String getFormattedValue(float value) {
+                int val = (int)value;
+                if(nodeCnt == 1 && (val == -1 || val == 1)){
+                    return "";
+                }else{
+                    return quarters[val];
+                }
+            }
+        };
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+        xAxis.setValueFormatter(formatter);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getAxisRight().setDrawLabels(false);
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getAxisLeft().setDrawGridLines(false);
+        lineChart.getAxisRight().setDrawGridLines(false);
+        LineData data = new LineData(dataSets);
+        lineChart.setDescription(null);
+        lineChart.setData(data);
+        lineChart.invalidate();
+    }
+
+    public class Deal implements Comparable<Deal> {
         String date;
         int payout;
 
@@ -136,10 +222,15 @@ public class ResultActivity extends AppCompatActivity {
 
         public Deal(String date, int payout) {
             if(date.length() == 7){ //2020111과 같은 월에 0이 생략된 경우 예외처리
-                String tmp = date.substring(0, 4);
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                String tmp = date.substring(0, 6);
+                System.out.println(tmp);
                 tmp += "0";
-                tmp += date.substring(4);
+                System.out.println(tmp);
+                tmp += date.substring(6);
+                System.out.println(tmp);
                 date = tmp;
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             }
             this.date = date;
             this.payout = payout;
@@ -162,8 +253,8 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         @Override
-        public int compareTo(Object o) {
-            return 0;
+        public int compareTo(Deal o) {
+            return date.compareTo(o.date);
         }
     }
 
