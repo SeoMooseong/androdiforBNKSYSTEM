@@ -35,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:singleLine="true"
             android:hint="이름을 입력해주세요"/>
 
         <TextView
@@ -50,6 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:inputType="number"
+            android:singleLine="true"
             android:hint="월 실수령액을 입력해주세요"/>
         <TextView
             android:layout_marginTop="10dp"
@@ -64,6 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:inputType="number"
+            android:singleLine="true"
             android:hint="보유자산을 입력해주세요"
             />
         <TextView
