@@ -58,9 +58,9 @@ public class ResultActivity extends AppCompatActivity {
 
         List<Apartment> aptList = null;
 
-        for(int i = 0; i < MainActivity.aptAdressList.size(); i++){
-            if(MainActivity.aptAdressList.get(i).getAddress().equals(address)){
-                aptList = MainActivity.aptAdressList.get(i).getList();
+        for(int i = 0; i < LoadingActivity.aptAdressList.size(); i++){
+            if(LoadingActivity.aptAdressList.get(i).getAddress().equals(address)){
+                aptList = LoadingActivity.aptAdressList.get(i).getList();
                 break;
             }
         }

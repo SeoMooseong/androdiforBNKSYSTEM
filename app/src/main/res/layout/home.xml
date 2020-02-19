@@ -15,27 +15,36 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="210dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="3"
-                app:cardCornerRadius="3dp">
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                android:background="@color/PointColor"-->
+<!--                android:text="월급 대출 비율"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/WhiteColor"-->
+<!--                />-->
+<!--            <android.support.v7.widget.CardView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="210dp"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                app:cardCornerRadius="3dp">-->
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/money"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.PieChart>
-            </android.support.v7.widget.CardView>
+<!--                <com.github.mikephil.charting.charts.PieChart-->
+<!--                    android:id="@+id/money"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.PieChart>-->
+<!--            </android.support.v7.widget.CardView>-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
@@ -179,6 +188,17 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="부산 평균 PIR(집값/연봉) LIR(대출금/연봉)"
+                android:textSize="14sp"
+                android:textColor="@color/WhiteColor"
+                android:background="@color/PointColor"
+                />
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="140dp"

@@ -63,63 +63,11 @@ public class MainActivity extends AppCompatActivity {
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
-    public static List<Apartment> apartmentList;
-    public static List<Pir> pirList;
-    public static List<Lir> lirList;
-    public static List<ApartmentList> aptAdressList;
-
     private String keyword; //검색키워드
 
     private List<String> addressList;
     private List<String> addressFakeList;
 
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-
-    private static final String [] LOCATION_PERMISSIONS = new String [] {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-    };
-
-    private  void initLoadDB(){
-        DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
-        mDbHelper.createDatabase();
-        mDbHelper.open();
-
-        apartmentList = mDbHelper.getTableData();
-        pirList = mDbHelper.getTableDataP();
-        lirList=mDbHelper.getTableDataL();
-        mDbHelper.close();
-
-        aptAdressList = new ArrayList<>();
-
-        String tmp;
-        List<Apartment> tmpArr;
-        boolean check = false;
-        for(int i = 0; i < apartmentList.size(); i++){
-            tmp = apartmentList.get(i).getAddress() + " " + apartmentList.get(i).getRoadress() + " " + apartmentList.get(i).getName();
-            for(int j = 0; j < aptAdressList.size(); j++){
-                if(tmp.equals(aptAdressList.get(j).getAddress())){
-
-                    tmpArr = aptAdressList.get(j).getList();
-                    tmpArr.add(apartmentList.get(i));
-                    aptAdressList.get(j).setList(tmpArr);
-                    check = true;
-                    if(apartmentList.get(i).getName().contains("엘시티")){
-                        System.out.println(aptAdressList.get(i).getList().size());
-                    }
-                    break;
-                }
-            }
-            if(!check){
-                ApartmentList apt = new ApartmentList(tmp, new ArrayList<Apartment>());
-                apt.getList().add(apartmentList.get(i));
-                aptAdressList.add(apt);
-            }else{
-                check = false;
-            }
-        }
-
-    }
     private SearchView search;
 
     private List<String> convertList(List<Apartment> ori){
@@ -146,17 +94,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //권한확인
-        int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        if(permission1 != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MainActivity.this, LOCATION_PERMISSIONS,
-                    PERMISSIONS_REQUEST_CODE);
-        }
-
-        //DB관련
-
         //툴바관련
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -172,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         bnaviview.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
-        initLoadDB();
+
     }
 
     @Override
@@ -189,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
         //자동완성 관련
-        KeywordArrayAdapter<String> dataAdapter = new KeywordArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, convertList(apartmentList));
+        KeywordArrayAdapter<String> dataAdapter = new KeywordArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, convertList(LoadingActivity.apartmentList));
 
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setDropDownAnchor(R.id.my_toolbar);
