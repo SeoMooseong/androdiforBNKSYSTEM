@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import com.bnk.comapny.bnksys.SQL.DataAdapter;
 import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.User;
+import com.bnk.comapny.bnksys.util.NumberFormat;
 
 import java.util.List;
 
@@ -47,13 +48,19 @@ public class StartActivity extends AppCompatActivity {
 
             }
         });
+
+        username=findViewById(R.id.username);
+        usersalary=findViewById(R.id.salary);
+        usermoney=findViewById(R.id.money);
+
+        usersalary.addTextChangedListener(new NumberFormat(usersalary));
+        usermoney.addTextChangedListener(new NumberFormat(usermoney));
+
         button = findViewById(R.id.loginbutton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username=findViewById(R.id.username);
-                usersalary=findViewById(R.id.salary);
-                usermoney=findViewById(R.id.money);
+
                 if(usermoney.equals(""))
                 {
 
@@ -71,7 +78,7 @@ public class StartActivity extends AppCompatActivity {
 
                 }
                 else{
-                    user = new User(username.getText()+"",Integer.parseInt(usersalary.getText()+""),Integer.parseInt(usermoney.getText()+""),userField);
+                    user = new User(username.getText()+"",Integer.parseInt(usersalary.getText().toString().replace(",","")),Integer.parseInt(usermoney.getText().toString().replace(",","")),userField);
                     initLoadDB(user);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
