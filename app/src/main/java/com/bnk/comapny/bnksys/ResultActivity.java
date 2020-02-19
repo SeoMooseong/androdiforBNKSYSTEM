@@ -1,6 +1,7 @@
 package com.bnk.comapny.bnksys;
 
 import android.content.Context;
+import android.content.Entity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,21 +19,36 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bnk.comapny.bnksys.model.Apartment;
+import com.bnk.comapny.bnksys.model.ApartmentList;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ResultActivity extends AppCompatActivity {
     MapView mapView;
     ListView listView;
+    LineChart lineChart;
+
+    ApartmentList tmpAptList;
+    Apartment tmpApt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        //지도 관련..
         Intent intent = getIntent();
 
         Double mapX = Double.parseDouble(intent.getStringExtra("mapX"));
@@ -53,14 +70,16 @@ public class ResultActivity extends AppCompatActivity {
         marker.setMarkerType(MapPOIItem.MarkerType.RedPin);
         mapView.addPOIItem(marker);
 
+
+        //리스트 관련..
         address = address.replace("$", "");
         address = address.replace("@", "");
 
         List<Apartment> aptList = null;
-
         for(int i = 0; i < LoadingActivity.aptAdressList.size(); i++){
-            if(LoadingActivity.aptAdressList.get(i).getAddress().equals(address)){
-                aptList = LoadingActivity.aptAdressList.get(i).getList();
+            tmpAptList = LoadingActivity.aptAdressList.get(i);
+            if(tmpAptList.getAddress().equals(address)){
+                aptList = tmpAptList.getList();
                 break;
             }
         }
@@ -69,26 +88,83 @@ public class ResultActivity extends AppCompatActivity {
         AptAdapter aptAdapter = new AptAdapter(this, R.id.result_list, aptList);
         listView.setAdapter(aptAdapter);
 
-//        if(aptList != null){
-//            TextView[] views = new TextView[aptList.size()];
-//            for(int i = 0;i < aptList.size(); i++){
-//                System.out.println(aptList.get(i).getPayout());
-//                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-//                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                views[i].setLayoutParams(params);
-//                resultList.addView(views[i], params);
-//            }
-//        }
+        //그래프 관련..
+        lineChart = (LineChart) findViewById(R.id.result_graph);
+        ArrayList<Entity> values = new ArrayList<>();
 
-//        ArrayAdapter<Apartment> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, aptList);
-//        listView = findViewById(R.id.result_list);
-//        listView.setAdapter(adapter);
+        HashSet<Integer> sizeSet = new HashSet(); //평수List
+        for(int i = 0; i < aptList.size(); i++){
+            sizeSet.add(aptList.get(i).getSizeP());
+        }
+
+        List<Integer> sizeList = new ArrayList<>(sizeSet);
+        Collections.sort(sizeList); //평수List 오름차순으로 변경
+
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, R.layout.result_graph_filter, sizeList);
+        Spinner filter = findViewById(R.id.result_graph_filter);
+        filter.setAdapter(adapter); //평수List를 Spinner 목록에 등록
+
+        List<List<Deal>> dealList = new ArrayList<>(); //평수별 Apartment 정보 list
+        for(int i = 0; i < sizeList.size(); i++){
+            dealList.add(new ArrayList<Deal>());
+        }
+
+        for(int i = 0; i < aptList.size(); i++){ //평수List와 평수별<Apartment>List의 인덱스를 동일하게 구성
+            for(int j = 0; j < sizeList.size(); j++){
+                tmpApt = aptList.get(i);
+                if(tmpApt.getSizeP() == sizeList.get(j)){
+                    dealList.get(j).add(new Deal(tmpApt.getContractYM() + tmpApt.getContractD(), tmpApt.getPayout()));
+                    break;
+                }
+            }
+        }
+
+        int numData = 5;
+
+        for(int i = 0; i < numData; i++){
+        }
+
+//        LineDataSet dataSet = new LineDataSet()
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("test", "Destroy called!");
+    public class Deal implements Comparable {
+        String date;
+        int payout;
+
+        public Deal() { }
+
+        public Deal(String date, int payout) {
+            if(date.length() == 7){ //2020111과 같은 월에 0이 생략된 경우 예외처리
+                String tmp = date.substring(0, 4);
+                tmp += "0";
+                tmp += date.substring(4);
+                date = tmp;
+            }
+            this.date = date;
+            this.payout = payout;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public int getPayout() {
+            return payout;
+        }
+
+        public void setPayout(int payout) {
+            this.payout = payout;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            return 0;
+        }
     }
 
     public class AptAdapter extends ArrayAdapter<Apartment> {

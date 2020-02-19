@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private List<String> addressList;
     private List<String> addressFakeList;
 
-    private SearchView search;
-
     private List<String> convertList(List<Apartment> ori){
         addressFakeList = new ArrayList<>();
         ArrayList<String> list = new ArrayList<>();
