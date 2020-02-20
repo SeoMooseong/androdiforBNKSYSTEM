@@ -46,7 +46,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FragmentHome extends Fragment {
-//    PieChart pieChart;
+    //    PieChart pieChart;
     LineChart lineChart;
     View homeview;
     TextView salarytext;
@@ -60,18 +60,19 @@ public class FragmentHome extends Fragment {
     String[] fields;
     ProgressDialog mProgress;
 
-    private void initLoadDB(String field){
+    private void initLoadDB(String field) {
         DataAdapter mDbHelper = new DataAdapter(getActivity());
         mDbHelper.open();
-        System.out.println("지역구 들어옴 : "+field);
-        StartActivity.recommandList = mDbHelper.getTableDateW(field,0,pirM);
+        System.out.println("지역구 들어옴 : " + field);
+        StartActivity.recommandList = mDbHelper.getTableDateW(field, pirM*0.5, pirM);
+
 
         mDbHelper.close();
 
         listRecommand = homeview.findViewById(R.id.list_page);
         layoutManager = new LinearLayoutManager(getActivity());
         listRecommand.setLayoutManager(layoutManager);
-        listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
+        listAdapter = new ListAdapter2(getActivity(), StartActivity.recommandList);
         listRecommand.setAdapter(listAdapter);
 //        listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
 //            new RecyclerItemClickListener.OnItemClickListener() {
@@ -86,62 +87,63 @@ public class FragmentHome extends Fragment {
 //        }));
         mProgress.dismiss();
     }
+
     private RecyclerView listRecommand;
     private RecyclerView.Adapter listAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        homeview = inflater.inflate(R.layout.home,container,false);
-        listRecommand = (RecyclerView)homeview.findViewById(R.id.list_page);
+        homeview = inflater.inflate(R.layout.home, container, false);
+        listRecommand = (RecyclerView) homeview.findViewById(R.id.list_page);
         layoutManager = new LinearLayoutManager(getActivity());
         listRecommand.setLayoutManager(layoutManager);
-        listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
+        listAdapter = new ListAdapter2(getActivity(), StartActivity.recommandList);
         listRecommand.setAdapter(listAdapter);
         listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
-            new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    Apartment apt = StartActivity.recommandList.get(position);
-                    MainActivity activity = (MainActivity)getActivity();
-                    activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
-                    activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
-                    activity.startGeocodeThread();
-                }
-        }));
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Apartment apt = StartActivity.recommandList.get(position);
+                        MainActivity activity = (MainActivity) getActivity();
+                        activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
+                        activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
+                        activity.startGeocodeThread();
+                    }
+                }));
         userPanel(StartActivity.user);
 //          chartMoney(StartActivity.user);
         chartPIRLIR();
         return homeview;
     }
-    public void userPanel(User user){
+
+    public void userPanel(User user) {
         salarytext = homeview.findViewById(R.id.salarym);
-        salaryY = (user.getSalaryM()*12)/10000;
-        String temps = salaryY+"";
-        if(temps.length()>4) {
+        salaryY = (user.getSalaryM() * 12) / 10000;
+        String temps = salaryY + "";
+        if (temps.length() > 4) {
             salarytext.setText(temps.substring(0, temps.length() - 4) + "억" + temps.substring((temps.length() - 4), temps.length()) + "만원");
-        }else{
-            salarytext.setText(temps+"만원");
+        } else {
+            salarytext.setText(temps + "만원");
         }
         pirtext = homeview.findViewById(R.id.pirm);
-        float pirRecently = LoadingActivity.pirList.get(LoadingActivity.pirList.size()-1).getpLocal();
-        pirM = salaryY*pirRecently;
-        String tempp = Math.round(pirM)+"";
-        if(tempp.length()>4) {
+        float pirRecently = LoadingActivity.pirList.get(LoadingActivity.pirList.size() - 1).getpLocal();
+        pirM = salaryY * pirRecently;
+        String tempp = Math.round(pirM) + "";
+        if (tempp.length() > 4) {
             pirtext.setText(tempp.substring(0, tempp.length() - 4) + "억" + tempp.substring((tempp.length() - 4), tempp.length()) + "만원");
-        }else
-        {
-            pirtext.setText(tempp+"만원");
+        } else {
+            pirtext.setText(tempp + "만원");
         }
         lirtext = homeview.findViewById(R.id.lirm);
-        float lirRecently = LoadingActivity.lirList.get(LoadingActivity.lirList.size()-1).getlLocal();
-        lirM = salaryY*lirRecently;
-        String templ= Math.round(lirM)+"";
-        if(templ.length()>4) {
+        float lirRecently = LoadingActivity.lirList.get(LoadingActivity.lirList.size() - 1).getlLocal();
+        lirM = salaryY * lirRecently;
+        String templ = Math.round(lirM) + "";
+        if (templ.length() > 4) {
             lirtext.setText(templ.substring(0, templ.length() - 4) + "억" + templ.substring((templ.length() - 4), templ.length()) + "만원");
-        }else
-        {
-            lirtext.setText(templ+"만원");
+        } else {
+            lirtext.setText(templ + "만원");
         }
         fieldtext = homeview.findViewById(R.id.fieldm);
         fieldtext.setText(user.getField());
@@ -167,31 +169,31 @@ public class FragmentHome extends Fragment {
             }
         });
     }
-    public void chartPIRLIR(){
-        lineChart = (LineChart)homeview.findViewById(R.id.pirlir);
+
+    public void chartPIRLIR() {
+        lineChart = (LineChart) homeview.findViewById(R.id.pirlir);
         ArrayList<Entity> values = new ArrayList<>();
 
         ArrayList<Entity> xDay = new ArrayList<>();
         ArrayList<Entry> yPir = new ArrayList<>();
         ArrayList<Entry> yLir = new ArrayList<>();
         int numData = 5;
-        for(int i =0;i<LoadingActivity.pirList.size();i++)
-        {
-            Entry c1e1 = new Entry(i,LoadingActivity.pirList.get(i).getpLocal());
-            Entry c2e2 = new Entry(i,LoadingActivity.lirList.get(i).getlLocal());
+        for (int i = 0; i < LoadingActivity.pirList.size(); i++) {
+            Entry c1e1 = new Entry(i, LoadingActivity.pirList.get(i).getpLocal());
+            Entry c2e2 = new Entry(i, LoadingActivity.lirList.get(i).getlLocal());
             yPir.add(c1e1);
             yLir.add(c2e2);
         }
 
-        LineDataSet setComp1 = new LineDataSet(yPir,"PIR : 집값/연봉");
-        LineDataSet setComp2 = new LineDataSet(yLir,"LIR : 주택담보대출/연봉");
-        setComp1.setColor(ContextCompat.getColor(getContext(),R.color.PointColor));
-        setComp1.setCircleColor(ContextCompat.getColor(getContext(),R.color.PointColor));
-        setComp1.setCircleHoleColor(ContextCompat.getColor(getContext(),R.color.PointColor));
+        LineDataSet setComp1 = new LineDataSet(yPir, "PIR : 집값/연봉");
+        LineDataSet setComp2 = new LineDataSet(yLir, "LIR : 주택담보대출/연봉");
+        setComp1.setColor(ContextCompat.getColor(getContext(), R.color.PointColor));
+        setComp1.setCircleColor(ContextCompat.getColor(getContext(), R.color.PointColor));
+        setComp1.setCircleHoleColor(ContextCompat.getColor(getContext(), R.color.PointColor));
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        setComp2.setColor(ContextCompat.getColor(getContext(),R.color.PointColor2));
-        setComp2.setCircleColor(ContextCompat.getColor(getContext(),R.color.PointColor2));
-        setComp2.setCircleHoleColor(ContextCompat.getColor(getContext(),R.color.PointColor2));
+        setComp2.setColor(ContextCompat.getColor(getContext(), R.color.PointColor2));
+        setComp2.setCircleColor(ContextCompat.getColor(getContext(), R.color.PointColor2));
+        setComp2.setCircleHoleColor(ContextCompat.getColor(getContext(), R.color.PointColor2));
         setComp2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
 
@@ -200,10 +202,9 @@ public class FragmentHome extends Fragment {
         dataSets.add(setComp2);
         final String[] quarters = new String[LoadingActivity.pirList.size()];
 
-        int size=0;
-        for(Pir pir : LoadingActivity.pirList)
-        {
-            quarters[size++]=pir.getpDay();
+        int size = 0;
+        for (Pir pir : LoadingActivity.pirList) {
+            quarters[size++] = pir.getpDay();
         }
 
         IndexAxisValueFormatter formatter = new IndexAxisValueFormatter() {

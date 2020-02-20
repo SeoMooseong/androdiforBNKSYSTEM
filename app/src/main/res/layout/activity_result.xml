@@ -132,7 +132,7 @@
                         android:gravity="center"
                         android:text="좌우로 스와이프 해보세요"
                         android:textColor="#000"
-                        android:textSize="15sp" />
+                        android:textSize="17sp" />
 
                     <android.support.v7.widget.AppCompatSeekBar
                         android:id="@+id/seek"

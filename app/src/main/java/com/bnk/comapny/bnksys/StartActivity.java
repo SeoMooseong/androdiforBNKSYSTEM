@@ -31,7 +31,7 @@ public class StartActivity extends AppCompatActivity {
         double priM = salaryYY*LoadingActivity.pirList.get(LoadingActivity.pirList.size()-1).getpLocal();
 
         System.out.println("지역구 들어옴 : "+user.getField());
-        recommandList = mDbHelper.getTableDateW(user.getField(),0,priM);
+        recommandList = mDbHelper.getTableDateW(user.getField(),0.5*priM,priM);
         mDbHelper.close();
     }
     @Override
