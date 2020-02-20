@@ -1,5 +1,6 @@
 package com.bnk.comapny.bnksys;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bnk.comapny.bnksys.SQL.DataAdapter;
 import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.Pir;
 import com.bnk.comapny.bnksys.model.User;
@@ -51,6 +53,21 @@ public class FragmentHome extends Fragment {
     private int salaryY;
     CardView fieldCard;
     String[] fields;
+    ProgressDialog mProgress;
+
+    private void initLoadDB(String field){
+        DataAdapter mDbHelper = new DataAdapter(getActivity());
+        mDbHelper.open();
+        System.out.println("지역구 들어옴 : "+field);
+        StartActivity.recommandList = mDbHelper.getTableDateW(field);
+
+        mDbHelper.close();
+        ListView listView = homeview.findViewById(R.id.list_page);
+        recAdapter recadapter = new recAdapter(getActivity(),R.id.list_page,StartActivity.recommandList);
+        listView.setAdapter(recadapter);
+        mProgress.dismiss();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,6 +125,8 @@ public class FragmentHome extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         fieldtext.setText(fields[which]);
+                        mProgress = ProgressDialog.show(getActivity(), "Wait", "Loading...");
+                        initLoadDB(fields[which]);
                     }
                 });
                 builder.show();
