@@ -3,6 +3,8 @@ package com.bnk.comapny.bnksys;
 import android.content.Context;
 import android.content.Entity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ import androidx.annotation.Nullable;
 
 import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.ApartmentList;
+import com.bnk.comapny.bnksys.util.NumberFormat;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -56,11 +60,14 @@ public class ResultActivity extends AppCompatActivity {
     Apartment tmpApt;
     List<Apartment> aptList;
     List<List<Deal>> dealList;
-
+    SeekBar sb;
+    TextView tv;
     final int numData = 5;
     ArrayList<Entry> values1;
     List<Deal> dataList;
-
+    private int seek_min;
+    private int seek_max;
+    final private int step =1;
     int nodeCnt;
     String[] quarters;
 
@@ -77,6 +84,54 @@ public class ResultActivity extends AppCompatActivity {
         showMap();
         showList();
         showChart();
+        sb = (SeekBar)findViewById(R.id.seek);
+        tv = (TextView)findViewById(R.id.loan_default);
+        seek_min = aptList.get(0).getPayout();
+        seek_max = aptList.get(0).getPayout();
+//        sb.setMax((seek_max-seek_min)/step);
+        for(Apartment aptt : aptList)
+        {
+            if(seek_min>=aptt.getPayout())
+            {
+                seek_min=aptt.getPayout();
+            }
+            if(seek_max<=aptt.getPayout())
+            {
+                seek_max=aptt.getPayout();
+            }
+        }
+        System.out.println("최소 : "+seek_min+"최대 : "+seek_max);
+        sb.getProgressDrawable().setColorFilter(Color.rgb(255,118,113), PorterDuff.Mode.SRC_IN);
+        sb.getThumb().setColorFilter(Color.rgb(255,118,113), PorterDuff.Mode.SRC_IN);
+        sb.setMax(seek_max);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                System.out.println(progress);
+                String temp = progress+"";
+                if(temp.length()>4)
+                {
+                    temp = temp.substring(0, temp.length() - 4) + "억" + temp.substring((temp.length() - 4), temp.length()) + "만원";
+                    tv.setText(temp);
+                }
+                else
+                {
+                    temp = progress+"만원";
+                    tv.setText(temp);
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                System.out.println("일음");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                System.out.println("일음");
+            }
+        });
     }
 
     private void showMap(){

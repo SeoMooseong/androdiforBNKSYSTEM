@@ -4,6 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/PointColor</item>
+        <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
+        <item name="colorPrimary">@color/ColorPrimaryDark</item>
     </style>
     <style name="ActionBars_title"
         parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
