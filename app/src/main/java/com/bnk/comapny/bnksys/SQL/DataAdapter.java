@@ -130,16 +130,16 @@ public class DataAdapter {
             throw mSQLException;
         }
     }
-    public List getTableDateW(String LOCATION){
+    public List getTableDateW(String LOCATION,double minPay,double maxPay){
         try{
 
             String sql ="select * " +
-                        "from (select address, Bunji, name, sizeM, contractYM, ContractD, min(tPayout) as payout, floor, BuildYear, roadress, sizeP " +
+                        "from (select address, Bunji, name, sizeM, contractYM, ContractD, min(tPayout) as payout, max(tPayout) as payoutmax, floor, BuildYear, roadress, sizeP " +
                               "from (select address, Bunji, name, sizeM, contractYM, ContractD, Cast(Replace(payout,\",\",\"\") as int) tPayout, floor, BuildYear, roadress, sizeP, address || roadress || sizeP as filter " +
                                     "from apartment " +
                                     "order by filter, payout) " +
                               "group by filter) " +
-                         "where address like '%"+LOCATION+"%' order by payout asc";
+                         "where payout >= "+minPay+" and payout <= "+maxPay+" and address like '% "+LOCATION+"%' order by payout desc";
 //            String sql = "select * from apartment";
             System.out.println("sql 문 : "+sql);
             // 모델 넣을 리스트 생성
@@ -162,10 +162,11 @@ public class DataAdapter {
                     apartment.setContractYM(mCur.getString(4));
                     apartment.setContractD(mCur.getString(5));
                     apartment.setPayout(Integer.parseInt(mCur.getString(6).replace(",","")));
-                    apartment.setFloor(Integer.parseInt(mCur.getString(7)));
-                    apartment.setBuildYear(mCur.getString(8));
-                    apartment.setRoadress(mCur.getString(9));
-                    apartment.setSizeP(Integer.parseInt(mCur.getString(10)));
+                    apartment.setPayoutmax(Integer.parseInt(mCur.getString(7).replace(",","")));
+                    apartment.setFloor(Integer.parseInt(mCur.getString(8)));
+                    apartment.setBuildYear(mCur.getString(9));
+                    apartment.setRoadress(mCur.getString(10));
+                    apartment.setSizeP(Integer.parseInt(mCur.getString(11)));
                     System.out.println(apartment.toString()+"");
                     apartlist.add(apartment);
                 }

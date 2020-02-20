@@ -50,8 +50,8 @@ public class FragmentHome extends Fragment {
     TextView pirtext;
     TextView lirtext;
     TextView fieldtext;
-    private double pirM;
-    private double lirM;
+    public static double pirM;
+    public static double lirM;
     private int salaryY;
     CardView fieldCard;
     String[] fields;
@@ -61,7 +61,7 @@ public class FragmentHome extends Fragment {
         DataAdapter mDbHelper = new DataAdapter(getActivity());
         mDbHelper.open();
         System.out.println("지역구 들어옴 : "+field);
-        StartActivity.recommandList = mDbHelper.getTableDateW(field);
+        StartActivity.recommandList = mDbHelper.getTableDateW(field,pirM*0.6,pirM);
 
         mDbHelper.close();
         listRecommand = homeview.findViewById(R.id.list_page);
@@ -160,8 +160,8 @@ public class FragmentHome extends Fragment {
             yLir.add(c2e2);
         }
 
-        LineDataSet setComp1 = new LineDataSet(yPir,"PIR");
-        LineDataSet setComp2 = new LineDataSet(yLir,"LIR");
+        LineDataSet setComp1 = new LineDataSet(yPir,"PIR : 집값/연봉");
+        LineDataSet setComp2 = new LineDataSet(yLir,"LIR : 주택담보대출/연봉");
         setComp1.setColor(ContextCompat.getColor(getContext(),R.color.PointColor));
         setComp1.setCircleColor(ContextCompat.getColor(getContext(),R.color.PointColor));
         setComp1.setCircleHoleColor(ContextCompat.getColor(getContext(),R.color.PointColor));
@@ -202,9 +202,6 @@ public class FragmentHome extends Fragment {
         lineChart.getAxisLeft().setDrawGridLines(false);
         lineChart.getAxisRight().setDrawGridLines(false);
         LineData data = new LineData(dataSets);
-        Description description = new Description();
-        description.setText("부산 지역 : PIR=집값/연봉, LIR=주택담보대출/연봉");
-        lineChart.setDescription(description);
         lineChart.setData(data);
         lineChart.invalidate();
     }

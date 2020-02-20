@@ -27,8 +27,11 @@ public class StartActivity extends AppCompatActivity {
     private void initLoadDB(User user){
         DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
         mDbHelper.open();
+        double salaryYY = (user.getSalaryM()*12)/10000;
+        double priM = salaryYY*LoadingActivity.pirList.get(LoadingActivity.pirList.size()-1).getpLocal();
+
         System.out.println("지역구 들어옴 : "+user.getField());
-        recommandList = mDbHelper.getTableDateW(user.getField());
+        recommandList = mDbHelper.getTableDateW(user.getField(),priM*0.6,priM);
         mDbHelper.close();
     }
     @Override

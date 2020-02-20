@@ -21,7 +21,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:text="부산 평균 PIR(집값/연봉) LIR(대출금/연봉)"
+                android:text="부산 평균 PIR LIR 현황"
                 android:textColor="@color/WhiteColor"
                 android:textSize="14sp" />
 

@@ -47,6 +47,9 @@ public class ListAdapter extends BaseAdapter {
         uname.setText(list.get(position).getName());
         TextView upayout = (TextView)view.findViewById(R.id.payoutuser);
         String temp = list.get(position).getPayout()+"";
+        String temp2 = list.get(position).getPayoutmax()+"";
+        TextView uadress = (TextView)view.findViewById(R.id.adressuser);
+        uadress.setText(list.get(position).getAddress());
         if(temp.length() > 4){
             String billion = temp.substring(0, (temp.length() - 4));
             String million = temp.substring((temp.length() - 4));
@@ -55,7 +58,16 @@ public class ListAdapter extends BaseAdapter {
             }
             temp = billion + "억 " + million;
         }
-        upayout.setText("실거래가 : "+temp+"만원");
+        if(temp2.length() > 4){
+            String billion = temp2.substring(0, (temp2.length() - 4));
+            String million = temp2.substring((temp2.length() - 4));
+            while(million.length() != 0 && million.charAt(0) == '0'){
+                million = million.replaceFirst("0", "");
+            }
+            temp2 = billion + "억 " + million;
+        }
+
+        upayout.setText("실거래가 : 최저"+temp+"만원 ~ 최고"+temp2+"만원");
         TextView usizeP = (TextView)view.findViewById(R.id.sizePuser);
         usizeP.setText("평수 : "+list.get(position).getSizeP()+"평");
 //        TextView ucheck = (TextView)view.findViewById(R.id.checking);
