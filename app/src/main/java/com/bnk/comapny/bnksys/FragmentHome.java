@@ -73,18 +73,17 @@ public class FragmentHome extends Fragment {
         listRecommand.setLayoutManager(layoutManager);
         listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
         listRecommand.setAdapter(listAdapter);
-        listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        StartActivity.recommandList.get(position);
-                        System.out.println(position);
-                    }
-                }));
-//        listRecommand
-//        ListView listView = homeview.findViewById(R.id.list_page);
-//        recAdapter recadapter = new recAdapter(getActivity(),R.id.list_page,StartActivity.recommandList);
-//        listView.setAdapter(recadapter);
+//        listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
+//            new RecyclerItemClickListener.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(View view, int position) {
+//                    Apartment apt = StartActivity.recommandList.get(position);
+//                    MainActivity activity = (MainActivity)getActivity();
+//                    activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
+//                    activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
+//                    activity.startGeocodeThread();
+//                }
+//        }));
         mProgress.dismiss();
     }
     private RecyclerView listRecommand;
@@ -100,13 +99,16 @@ public class FragmentHome extends Fragment {
         listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
         listRecommand.setAdapter(listAdapter);
         listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        StartActivity.recommandList.get(position);
-                        System.out.println(position);
-                    }
-                }));
+            new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Apartment apt = StartActivity.recommandList.get(position);
+                    MainActivity activity = (MainActivity)getActivity();
+                    activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
+                    activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
+                    activity.startGeocodeThread();
+                }
+        }));
         userPanel(StartActivity.user);
 //          chartMoney(StartActivity.user);
         chartPIRLIR();

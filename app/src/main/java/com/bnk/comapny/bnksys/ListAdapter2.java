@@ -44,7 +44,7 @@ public class ListAdapter2 extends RecyclerView.Adapter<ListAdapter2.MyViewHolder
                     int pos = getAdapterPosition();
                     System.out.print("@@@@@@@@@@@@@@@@@@@@@");
                     System.out.print(pos);
-                    System.out.print("@@@@@@@@@@@@@@@@@@@@@");
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@");
 //                    if(pos != RecyclerView.NO_POSITION){
 //                        Toast.makeText(context, pos, Toast.LENGTH_SHORT).show();
 //                        if(listner != null){

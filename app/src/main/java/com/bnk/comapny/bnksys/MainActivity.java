@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
-    private String keyword; //검색키워드
+    String keyword; //검색키워드
 
     private List<String> addressList;
     private List<String> addressFakeList;
@@ -163,6 +163,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    public void startGeocodeThread(){
+        GeocodeThread thread = new GeocodeThread();
+        thread.start();
     }
 
 //    static public void searchResult(View v, int pos){
