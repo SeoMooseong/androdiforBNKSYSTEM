@@ -27,7 +27,7 @@ public class NumberFormat implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count)
     {
-        if(!s.toString().equals(sensor)){
+        if(s.length() != 0 && !s.toString().equals(sensor)){
             String text = txt.getText().toString();
             text = text.replace(",", "");
             int cnt = 1;

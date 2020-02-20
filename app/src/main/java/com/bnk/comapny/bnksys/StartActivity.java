@@ -53,6 +53,10 @@ public class StartActivity extends AppCompatActivity {
         usersalary=findViewById(R.id.salary);
         usermoney=findViewById(R.id.money);
 
+        username.setText("홍길동");
+        usersalary.setText("3,600,000");
+        usermoney.setText("56,000,000");
+
         usersalary.addTextChangedListener(new NumberFormat(usersalary));
         usermoney.addTextChangedListener(new NumberFormat(usermoney));
 
