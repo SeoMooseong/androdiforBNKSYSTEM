@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="PointColor">#FF7671</color>
+    <color name="PointColor">#2E7DBE</color>
     <color name="ColorPrimaryDark">#FF7671</color>
     <color name="ColorPrimaryLight">#FF7671</color>
     <color name="BackColor">#F5F5F5</color>

@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 
 import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.ApartmentList;
+import com.bnk.comapny.bnksys.parser.Data;
 import com.bnk.comapny.bnksys.util.NumberFormat;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -75,6 +76,9 @@ public class ResultActivity extends AppCompatActivity {
     private RecyclerView listRecommand;
     private RecyclerView.Adapter listAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView loanlist;
+    private RecyclerView.Adapter loanAdapter;
+    private RecyclerView.LayoutManager loanManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,7 @@ public class ResultActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 System.out.println(progress);
                 String temp = progress+"";
+
                 if(temp.length()>4)
                 {
                     temp = temp.substring(0, temp.length() - 4) + "억" + temp.substring((temp.length() - 4), temp.length()) + "만원";
@@ -119,7 +124,6 @@ public class ResultActivity extends AppCompatActivity {
                     temp = progress+"만원";
                     tv.setText(temp);
                 }
-
             }
 
             @Override
@@ -179,6 +183,11 @@ public class ResultActivity extends AppCompatActivity {
 //        ListView listView = findViewById(R.id.result_list);
 //        AptAdapter aptAdapter = new AptAdapter(this, R.id.result_list, aptList);
 //        listView.setAdapter(aptAdapter);
+        loanlist = (RecyclerView) findViewById(R.id.loan_list);
+        loanManager = new LinearLayoutManager(this);
+        loanlist.setLayoutManager(loanManager);
+        loanAdapter = new LoanAdapter2(this, Data.loans);
+        loanlist.setAdapter(loanAdapter);
     }
 
     private void showChart(){
