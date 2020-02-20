@@ -66,8 +66,9 @@ public class ResultActivity extends AppCompatActivity {
     final int numData = 5;
     ArrayList<Entry> values1;
     List<Deal> dataList;
-    private int seek_min;
-    private int seek_max;
+    public static int seek_min;
+    public static int seek_max;
+    int monney;
     final private int step =1;
     int nodeCnt;
     String[] quarters;
@@ -105,9 +106,11 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
         System.out.println("최소 : "+seek_min+"최대 : "+seek_max);
-        sb.getProgressDrawable().setColorFilter(Color.rgb(255,118,113), PorterDuff.Mode.SRC_IN);
-        sb.getThumb().setColorFilter(Color.rgb(255,118,113), PorterDuff.Mode.SRC_IN);
-        sb.setMax(seek_max);
+        monney = seek_max-Math.round(StartActivity.user.getMoney()/10000);
+
+        sb.getProgressDrawable().setColorFilter(Color.rgb(0,255,0), PorterDuff.Mode.SRC_IN);
+        sb.getThumb().setColorFilter(Color.rgb(0,255,0), PorterDuff.Mode.SRC_IN);
+        sb.setMax(monney);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -117,12 +120,44 @@ public class ResultActivity extends AppCompatActivity {
                 if(temp.length()>4)
                 {
                     temp = temp.substring(0, temp.length() - 4) + "억" + temp.substring((temp.length() - 4), temp.length()) + "만원";
-                    tv.setText(temp);
+
+                    if(progress>Math.round(FragmentHome.lirM))
+                    {
+                        if(progress>(aptList.get(aptList.size()-1).getPayout()*0.7))
+                        {
+                            sb.getProgressDrawable().setColorFilter(Color.rgb(255,0,0), PorterDuff.Mode.SRC_IN);
+                            sb.getThumb().setColorFilter(Color.rgb(255,0,0), PorterDuff.Mode.SRC_IN);
+                            tv.setText("대출 불가, LTV 70% 초과 : "+temp);
+                        }else{
+                            sb.getProgressDrawable().setColorFilter(Color.rgb(245,234,43), PorterDuff.Mode.SRC_IN);
+                            sb.getThumb().setColorFilter(Color.rgb(245,234,43), PorterDuff.Mode.SRC_IN);
+                            tv.setText("적당한 대출 요망 : "+temp);
+                        }
+
+                    }else
+                    {
+                        sb.getProgressDrawable().setColorFilter(Color.rgb(0,255,0), PorterDuff.Mode.SRC_IN);
+                        sb.getThumb().setColorFilter(Color.rgb(0,255,0), PorterDuff.Mode.SRC_IN);
+                        tv.setText(temp);
+                    }
+
                 }
                 else
                 {
                     temp = progress+"만원";
-                    tv.setText(temp);
+                    if(progress>Math.round(FragmentHome.lirM))
+                    {
+                        if(progress>(aptList.get(aptList.size()-1).getPayout()*0.7))
+                        {
+                            tv.setText("대출 불가, LTV 70% 초과 : "+temp);
+                        }else{
+                            tv.setText("적당한 대출 요망, 현재 : "+temp);
+                        }
+
+                    }else
+                    {
+                        tv.setText(temp);
+                    }
                 }
             }
 
@@ -149,7 +184,6 @@ public class ResultActivity extends AppCompatActivity {
         int idx = address.indexOf("@");
         String aptName = address.substring(idx + 1);
 
-        Toast.makeText(this, mapX + ", " + mapY, Toast.LENGTH_SHORT).show();
 
         mapView = findViewById(R.id.result_map_view);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapX, mapY), true);

@@ -315,7 +315,6 @@ public class MainActivity extends AppCompatActivity {
                 mProgress.dismiss();
 
                 List<String> result = (List<String>) msg.obj;
-                Toast.makeText(MainActivity.this, result.get(0) + ", " + result.get(1), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
 
                 intent.putExtra("mapX", result.get(0));
