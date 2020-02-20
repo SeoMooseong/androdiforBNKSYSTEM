@@ -13,6 +13,8 @@ import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.ApartmentList;
 import com.bnk.comapny.bnksys.model.Lir;
 import com.bnk.comapny.bnksys.model.Pir;
+import com.bnk.comapny.bnksys.parser.Data;
+import com.bnk.comapny.bnksys.parser.LoanParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,9 @@ public class LoadingActivity extends AppCompatActivity {
         DataAdapter mDbHelper = new DataAdapter(getApplicationContext());
         mDbHelper.createDatabase();
         mDbHelper.open();
+        LoanParser loanParser = new LoanParser();
+        Thread loanThread = new Thread(loanParser);
+        loanThread.start();
 
         apartmentList = mDbHelper.getTableData();
         pirList = mDbHelper.getTableDataP();
@@ -74,6 +79,10 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+
+        Intent intent = new Intent(getApplicationContext(),StartActivity.class);
+        startActivity(intent);
         initLoadDB();
 
         int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
@@ -83,9 +92,6 @@ public class LoadingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(LoadingActivity.this, LOCATION_PERMISSIONS,
                     PERMISSIONS_REQUEST_CODE);
         }
-
-        Intent intent = new Intent(getApplicationContext(),StartActivity.class);
-        startActivity(intent);
         finish();
     }
 }

@@ -44,8 +44,11 @@ public class ListAdapter2 extends RecyclerView.Adapter<ListAdapter2.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         TextView uname = holder.linearLayout.findViewById(R.id.apartnameuser);
         uname.setText(list.get(position).getName());
+        TextView uadress = (TextView)holder.linearLayout.findViewById(R.id.adressuser);
+        uadress.setText(list.get(position).getAddress());
         TextView upayout = holder.linearLayout.findViewById(R.id.payoutuser);
         String temp = list.get(position).getPayout()+"";
+        String temp2 = list.get(position).getPayoutmax()+"";
         if(temp.length() > 4){
             String billion = temp.substring(0, (temp.length() - 4));
             String million = temp.substring((temp.length() - 4));
@@ -54,7 +57,15 @@ public class ListAdapter2 extends RecyclerView.Adapter<ListAdapter2.MyViewHolder
             }
             temp = billion + "억 " + million;
         }
-        upayout.setText("실거래가 : "+temp+"만원");
+        if(temp2.length() > 4){
+            String billion = temp2.substring(0, (temp2.length() - 4));
+            String million = temp2.substring((temp2.length() - 4));
+            while(million.length() != 0 && million.charAt(0) == '0'){
+                million = million.replaceFirst("0", "");
+            }
+            temp2 = billion + "억 " + million;
+        }
+        upayout.setText("실거래가 : 최저"+temp+"만원 ~ 최고"+temp2+"만원");
         TextView usizeP = holder.linearLayout.findViewById(R.id.sizePuser);
 
         usizeP.setText("평수 : "+list.get(position).getSizeP()+"평");

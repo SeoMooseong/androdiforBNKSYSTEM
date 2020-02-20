@@ -31,9 +31,16 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:gravity="right" />
             </LinearLayout>
+            <TextView
+                android:id="@+id/adressuser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/FontDefaultColor"
+                android:textSize="13sp"
+                android:gravity="left"/>
 
 
             <View

@@ -38,6 +38,7 @@ import com.bnk.comapny.bnksys.model.Apartment;
 import com.bnk.comapny.bnksys.model.ApartmentList;
 import com.bnk.comapny.bnksys.model.Lir;
 import com.bnk.comapny.bnksys.model.Pir;
+import com.bnk.comapny.bnksys.parser.Data;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         {
             System.out.println(ap.getName()+" "+(i++)+"번쨰");
         }
-
         //툴바관련
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -176,9 +176,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.analysis:
                     transaction.replace(R.id.frameLayout, analysis).commitAllowingStateLoss();
-                    break;
-                case R.id.profile:
-                    transaction.replace(R.id.frameLayout, profile).commitAllowingStateLoss();
                     break;
             }
             return true;

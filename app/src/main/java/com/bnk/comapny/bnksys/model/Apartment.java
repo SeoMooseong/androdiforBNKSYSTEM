@@ -6,6 +6,7 @@ public class Apartment {
     String Bunji; //시군구번지
     String roadress; //도로명주소
     int payout; //매매대금
+    int payoutmax;
     int floor; //층수
     float sizeM; //크기(m2)
     int sizeP; //크기(평수)
@@ -20,6 +21,7 @@ public class Apartment {
         this.Bunji = "";
         this.roadress = "";
         this.payout = 0;
+        this.payoutmax = 0;
         this.floor = 0;
         this.sizeM = 0;
         this.ContractYM = "";
@@ -41,6 +43,30 @@ public class Apartment {
         this.ContractD = contractD;
         this.sizeP = sizeP;
         this.BuildYear = BuildYear;
+        this.payoutmax=0;
+    }
+
+    public Apartment(String name, String address, String bunji, String roadress, int payout, int payoutmax, int floor, float sizeM, int sizeP, String contractYM, String contractD, String buildYear) {
+        this.name = name;
+        this.address = address;
+        Bunji = bunji;
+        this.roadress = roadress;
+        this.payout = payout;
+        this.payoutmax = payoutmax;
+        this.floor = floor;
+        this.sizeM = sizeM;
+        this.sizeP = sizeP;
+        ContractYM = contractYM;
+        ContractD = contractD;
+        BuildYear = buildYear;
+    }
+
+    public int getPayoutmax() {
+        return payoutmax;
+    }
+
+    public void setPayoutmax(int payoutmax) {
+        this.payoutmax = payoutmax;
     }
 
     public String getName() {
