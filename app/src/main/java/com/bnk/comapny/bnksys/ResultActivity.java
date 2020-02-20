@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +64,11 @@ public class ResultActivity extends AppCompatActivity {
     int nodeCnt;
     String[] quarters;
 
+
+    private RecyclerView listRecommand;
+    private RecyclerView.Adapter listAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,10 +116,14 @@ public class ResultActivity extends AppCompatActivity {
                 break;
             }
         }
-
-        ListView listView = findViewById(R.id.result_list);
-        AptAdapter aptAdapter = new AptAdapter(this, R.id.result_list, aptList);
-        listView.setAdapter(aptAdapter);
+        listRecommand = (RecyclerView) findViewById(R.id.result_list);
+        layoutManager = new LinearLayoutManager(this);
+        listRecommand.setLayoutManager(layoutManager);
+        listAdapter = new ResultAdapter2(this,aptList);
+        listRecommand.setAdapter(listAdapter);
+//        ListView listView = findViewById(R.id.result_list);
+//        AptAdapter aptAdapter = new AptAdapter(this, R.id.result_list, aptList);
+//        listView.setAdapter(aptAdapter);
     }
 
     private void showChart(){
