@@ -240,7 +240,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
                             android:paddingBottom="1dp"
-                            android:text="선호 지역"
+                            android:text="선호 지역 (선택)"
                             android:textColor="@color/WhiteColor"
                             android:textSize="12sp" />
 

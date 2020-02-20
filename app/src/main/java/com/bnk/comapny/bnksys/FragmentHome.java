@@ -61,7 +61,7 @@ public class FragmentHome extends Fragment {
         DataAdapter mDbHelper = new DataAdapter(getActivity());
         mDbHelper.open();
         System.out.println("지역구 들어옴 : "+field);
-        StartActivity.recommandList = mDbHelper.getTableDateW(field,pirM*0.6,pirM);
+        StartActivity.recommandList = mDbHelper.getTableDateW(field,0,pirM);
 
         mDbHelper.close();
         listRecommand = homeview.findViewById(R.id.list_page);
