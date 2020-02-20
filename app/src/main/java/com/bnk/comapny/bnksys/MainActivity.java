@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentAnalysis analysis = new FragmentAnalysis();
     private FragmentProfile profile = new FragmentProfile();
 
-    private String keyword; //검색키워드
+    String keyword; //검색키워드
 
     private List<String> addressList;
     private List<String> addressFakeList;
@@ -164,6 +164,31 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
+    public void startGeocodeThread(){
+        GeocodeThread thread = new GeocodeThread();
+        thread.start();
+    }
+
+//    static public void searchResult(View v, int pos){
+//
+//
+//        for(int i = 0; i < addressList.size(); i++){
+//            if(keyword.equals(addressList.get(i))){
+//                keyword = addressFakeList.get(i);
+//                break;
+//            }
+//        }
+////                Toast.makeText(MainActivity.this, keyword, Toast.LENGTH_SHORT).show();
+//        mProgress = ProgressDialog.show(v.getContext(), "Wait", "Search...");
+//
+//        InputMethodManager imm = (InputMethodManager) getSystemService(
+//                Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+//
+//        GeocodeThread thread = new GeocodeThread();
+//        thread.start();
+//    }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -280,24 +305,26 @@ public class MainActivity extends AppCompatActivity {
 
     //주소->좌표 전환
     ProgressDialog mProgress;
-    Handler mAfterDown = new Handler() {
 
-        @Override
-        public void handleMessage(Message msg) {
-            mProgress.dismiss();
-
-            List<String> result = (List<String>) msg.obj;
-            Toast.makeText(MainActivity.this, result.get(0) + ", " + result.get(1), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-
-            intent.putExtra("mapX", result.get(0));
-            intent.putExtra("mapY", result.get(1));
-            intent.putExtra("address", result.get(2));
-            startActivity(intent);
-        }
-    };
 
     class GeocodeThread extends Thread {
+        Handler mAfterDown = new Handler() {
+
+            @Override
+            public void handleMessage(Message msg) {
+                mProgress.dismiss();
+
+                List<String> result = (List<String>) msg.obj;
+                Toast.makeText(MainActivity.this, result.get(0) + ", " + result.get(1), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+
+                intent.putExtra("mapX", result.get(0));
+                intent.putExtra("mapY", result.get(1));
+                intent.putExtra("address", result.get(2));
+                startActivity(intent);
+            }
+        };
+
         @Override
         public void run() {
             List<Double> geoCode = getGeocode();

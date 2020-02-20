@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Entity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,11 +18,13 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bnk.comapny.bnksys.SQL.DataAdapter;
 import com.bnk.comapny.bnksys.model.Apartment;
@@ -64,14 +67,23 @@ public class FragmentHome extends Fragment {
         StartActivity.recommandList = mDbHelper.getTableDateW(field,0,pirM);
 
         mDbHelper.close();
+
         listRecommand = homeview.findViewById(R.id.list_page);
         layoutManager = new LinearLayoutManager(getActivity());
         listRecommand.setLayoutManager(layoutManager);
         listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
         listRecommand.setAdapter(listAdapter);
-//        ListView listView = homeview.findViewById(R.id.list_page);
-//        recAdapter recadapter = new recAdapter(getActivity(),R.id.list_page,StartActivity.recommandList);
-//        listView.setAdapter(recadapter);
+//        listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
+//            new RecyclerItemClickListener.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(View view, int position) {
+//                    Apartment apt = StartActivity.recommandList.get(position);
+//                    MainActivity activity = (MainActivity)getActivity();
+//                    activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
+//                    activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
+//                    activity.startGeocodeThread();
+//                }
+//        }));
         mProgress.dismiss();
     }
     private RecyclerView listRecommand;
@@ -80,16 +92,27 @@ public class FragmentHome extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-          homeview = inflater.inflate(R.layout.home,container,false);
-            listRecommand = (RecyclerView)homeview.findViewById(R.id.list_page);
-            layoutManager = new LinearLayoutManager(getActivity());
-            listRecommand.setLayoutManager(layoutManager);
-            listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
-            listRecommand.setAdapter(listAdapter);
-          userPanel(StartActivity.user);
+        homeview = inflater.inflate(R.layout.home,container,false);
+        listRecommand = (RecyclerView)homeview.findViewById(R.id.list_page);
+        layoutManager = new LinearLayoutManager(getActivity());
+        listRecommand.setLayoutManager(layoutManager);
+        listAdapter = new ListAdapter2(getActivity(),StartActivity.recommandList);
+        listRecommand.setAdapter(listAdapter);
+        listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
+            new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Apartment apt = StartActivity.recommandList.get(position);
+                    MainActivity activity = (MainActivity)getActivity();
+                    activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
+                    activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
+                    activity.startGeocodeThread();
+                }
+        }));
+        userPanel(StartActivity.user);
 //          chartMoney(StartActivity.user);
-          chartPIRLIR();
-          return homeview;
+        chartPIRLIR();
+        return homeview;
     }
     public void userPanel(User user){
         salarytext = homeview.findViewById(R.id.salarym);
@@ -205,4 +228,5 @@ public class FragmentHome extends Fragment {
         lineChart.setData(data);
         lineChart.invalidate();
     }
+
 }
