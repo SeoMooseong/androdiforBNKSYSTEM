@@ -31,13 +31,17 @@ import com.bnk.comapny.bnksys.parser.Data;
 import com.bnk.comapny.bnksys.util.NumberFormat;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.IMarker;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.MPPointF;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -192,15 +196,15 @@ public class ResultActivity extends AppCompatActivity {
 
     private void showChart(){
         //그래프 관련..
-        HashSet<Integer> sizeSet = new HashSet(); //평수List
+        HashSet<String> sizeSet = new HashSet(); //평수List
         for(int i = 0; i < aptList.size(); i++){
-            sizeSet.add(aptList.get(i).getSizeP());
+            sizeSet.add(aptList.get(i).getSizeP() + "평");
         }
 
-        List<Integer> sizeList = new ArrayList<>(sizeSet);
+        List<String> sizeList = new ArrayList<>(sizeSet);
         Collections.sort(sizeList); //평수List 오름차순으로 변경
 
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, R.layout.result_graph_filter, sizeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.result_graph_filter, sizeList);
         Spinner filter = findViewById(R.id.result_graph_filter);
         filter.setAdapter(adapter); //평수List를 Spinner 목록에 등록
 
@@ -212,7 +216,7 @@ public class ResultActivity extends AppCompatActivity {
         for(int i = 0; i < aptList.size(); i++){ //평수List와 평수별<Apartment>List의 인덱스를 동일하게 구성
             for(int j = 0; j < sizeList.size(); j++){
                 tmpApt = aptList.get(i);
-                if(tmpApt.getSizeP() == sizeList.get(j)){
+                if(tmpApt.getSizeP() == Integer.parseInt(sizeList.get(j).replace("평", ""))){
                     dealList.get(j).add(new Deal(tmpApt.getContractYM() + tmpApt.getContractD(), tmpApt.getPayout()));
                     break;
                 }
@@ -266,7 +270,9 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public String getFormattedValue(float value) {
                 int val = (int)value;
-                if(nodeCnt == 1 && (val == -1 || val == 1)){
+                if(val >= quarters.length){
+                    return "";
+                } else if(nodeCnt == 1 && (val == -1 || val == 1)){
                     return "";
                 }else{
                     return quarters[val];
@@ -297,15 +303,10 @@ public class ResultActivity extends AppCompatActivity {
 
         public Deal(String date, int payout) {
             if(date.length() == 7){ //2020111과 같은 월에 0이 생략된 경우 예외처리
-                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                 String tmp = date.substring(0, 6);
-                System.out.println(tmp);
                 tmp += "0";
-                System.out.println(tmp);
                 tmp += date.substring(6);
-                System.out.println(tmp);
                 date = tmp;
-                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             }
             this.date = date;
             this.payout = payout;
@@ -411,17 +412,47 @@ public class ResultActivity extends AppCompatActivity {
             }
             holder.date.setText("계약일자 : "+apt.getContractYM() + tmp);
             tmp = apt.getPayout() + "";
-            if(tmp.length() > 4){
-                String billion = tmp.substring(0, (tmp.length() - 4));
-                String million = tmp.substring((tmp.length() - 4));
-                while(million.length() != 0 && million.charAt(0) == '0'){
-                    million = million.replaceFirst("0", "");
-                }
-                tmp = billion + "억 " + million;
-            }
-            holder.payout.setText("매매금액 : " +tmp);
+            holder.payout.setText("매매금액 : " + convertMoney(tmp));
 
             return row;
         }
+    }
+
+    public class charMarkerView extends MarkerView{
+        private TextView tvContent;
+        public charMarkerView(Context context, int layoutResource) {
+            super(context, layoutResource);
+            tvContent = findViewById(R.id.tvContent);
+        }
+
+        @Override
+        public void refreshContent(Entry e, Highlight highlight) {
+            String money = e.getX() + "";
+            tvContent.setText(e.getY() + " : " + convertMoney(money));
+        }
+
+        private MPPointF mOffset;
+
+        @Override
+        public MPPointF getOffset() {
+            if(mOffset == null) {
+                // center the marker horizontally and vertically
+                mOffset = new MPPointF(-(getWidth() / 2), -getHeight());
+            }
+
+            return mOffset;
+        }
+    }
+
+    public String convertMoney(String money){
+        if(money.length() > 4){
+            String billion = money.substring(0, (money.length() - 4));
+            String million = money.substring((money.length() - 4));
+            while(million.length() != 0 && million.charAt(0) == '0'){
+                million = million.replaceFirst("0", "");
+            }
+            money = billion + "억 " + million;
+        }
+        return money;
     }
 }
