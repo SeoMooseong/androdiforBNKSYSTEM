@@ -56,13 +56,18 @@ public class LoanAdapter2 extends RecyclerView.Adapter<LoanAdapter2.ResultViewHo
         TextView mmpay = (TextView)holder.linearLayout.findViewById(R.id.monthpaypay);
         int remainmoney= (ResultActivity.seek_max*10000)-StartActivity.user.getMoney();
         double rate = (Data.loans.get(position).getLend_rate_max()/12)*0.001;
+        double maxrate = (Data.loans.get(position).getLend_rate_max()/12)*0.01;
+
         double bunmo = Math.pow((double)1+rate,240)-1;
 
         double bunja = remainmoney*rate*Math.pow(1+rate,240);
         int result = (int)Math.round(bunja/bunmo);
         if(remainmoney>=0) {
             if (Data.loans.get(position).getRpay_type_nm().equals("만기일시상환방식")) {
-                mmpay.setText("");
+
+                String temp = ( Math.round(maxrate*remainmoney)+"").substring(0,(  Math.round(maxrate*remainmoney)+"").length()-4)+"만"+(  Math.round(maxrate*remainmoney)+"").substring((  Math.round(maxrate*remainmoney)+"").length()-4,(  Math.round(maxrate*remainmoney)+"").length());
+
+                mmpay.setText("월 이자 : "+temp+"원");
             } else if (Data.loans.get(position).getRpay_type_nm().equals("분할상환방식")) {
                 String temp = (result+"").substring(0,(result+"").length()-4)+"만"+(result+"").substring((result+"").length()-4,(result+"").length());
                 mmpay.setText("20년 기준 월 : "+temp+"원");

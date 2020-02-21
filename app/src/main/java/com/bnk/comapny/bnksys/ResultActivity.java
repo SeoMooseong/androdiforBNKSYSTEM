@@ -64,11 +64,11 @@ public class ResultActivity extends AppCompatActivity {
     int filterSize;
     String address;
     String filterAddress;
-
+    String LTV;
     ApartmentList tmpAptList;
     Apartment tmpApt;
     List<Apartment> aptList;
-    List<Apartment> filteredList;
+    public static List<Apartment> filteredList;
     List<List<Deal>> dealList;
     SeekBar sb;
     TextView tv;
@@ -108,10 +108,10 @@ public class ResultActivity extends AppCompatActivity {
         showChart();
         sb = (SeekBar)findViewById(R.id.seek);
         tv = (TextView)findViewById(R.id.loan_default);
-        seek_min = aptList.get(0).getPayout();
-        seek_max = aptList.get(0).getPayout();
+        seek_min = filteredList.get(0).getPayout();
+        seek_max = filteredList.get(0).getPayout();
 //        sb.setMax((seek_max-seek_min)/step);
-        for(Apartment aptt : aptList)
+        for(Apartment aptt : filteredList)
         {
             if(seek_min>=aptt.getPayout())
             {
@@ -124,7 +124,8 @@ public class ResultActivity extends AppCompatActivity {
         }
         System.out.println("최소 : "+seek_min+"최대 : "+seek_max);
         monney = seek_max-Math.round(StartActivity.user.getMoney()/10000);
-
+        LTV = Math.round(filteredList.get(filteredList.size()-1).getPayout()*0.7)+"";
+        LTV = LTV.substring(0,LTV.length()-4)+"억"+LTV.substring(LTV.length()-4,LTV.length())+"만원";
         sb.getProgressDrawable().setColorFilter(Color.rgb(0,255,0), PorterDuff.Mode.SRC_IN);
         sb.getThumb().setColorFilter(Color.rgb(0,255,0), PorterDuff.Mode.SRC_IN);
         sb.setMax(monney);
@@ -140,11 +141,11 @@ public class ResultActivity extends AppCompatActivity {
 
                     if(progress>Math.round(FragmentHome.lirM))
                     {
-                        if(progress>(aptList.get(aptList.size()-1).getPayout()*0.7))
+                        if(progress>(filteredList.get(filteredList.size()-1).getPayout()*0.7))
                         {
                             sb.getProgressDrawable().setColorFilter(Color.rgb(255,0,0), PorterDuff.Mode.SRC_IN);
                             sb.getThumb().setColorFilter(Color.rgb(255,0,0), PorterDuff.Mode.SRC_IN);
-                            tv.setText("대출 불가, LTV 70% 초과 : "+temp);
+                            tv.setText("대출 불가, LTV 70% 초과 : "+temp+"\n최대 가능 금액 : "+LTV);
                         }else{
                             sb.getProgressDrawable().setColorFilter(Color.rgb(245,234,43), PorterDuff.Mode.SRC_IN);
                             sb.getThumb().setColorFilter(Color.rgb(245,234,43), PorterDuff.Mode.SRC_IN);
@@ -164,9 +165,9 @@ public class ResultActivity extends AppCompatActivity {
                     temp = progress+"만원";
                     if(progress>Math.round(FragmentHome.lirM))
                     {
-                        if(progress>(aptList.get(aptList.size()-1).getPayout()*0.7))
+                        if(progress>(filteredList.get(filteredList.size()-1).getPayout()*0.7))
                         {
-                            tv.setText("대출 불가, LTV 70% 초과 : "+temp);
+                            tv.setText("대출 불가, LTV 70% 초과 : "+temp+"\n최대 가능 금액 : "+LTV);
                         }else{
                             tv.setText("적당한 대출 요망, 현재 : "+temp);
                         }
