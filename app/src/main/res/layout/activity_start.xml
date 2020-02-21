@@ -106,17 +106,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/my_array"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/loginbutton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:background="@drawable/btn_color"
-            android:text="찾아줘!"
+            android:text="부비부비 아파트 찾아줘"
             android:textColor="@color/WhiteColor"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_gravity="center"/>
 
     </LinearLayout>
