@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentProfile profile = new FragmentProfile();
 
     String keyword; //검색키워드
+    int keywordSize; //검색평수
 
     private List<String> addressList;
     private List<String> addressFakeList;
@@ -94,10 +95,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         int i=0;
-        for(Apartment ap : StartActivity.recommandList)
-        {
-            System.out.println(ap.getName()+" "+(i++)+"번쨰");
-        }
+
         //툴바관련
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -143,25 +141,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 keyword = ((TextView)view).getText().toString();
-                System.out.println(keyword);
                 int idx = keyword.lastIndexOf('(');
                 String aptName =  keyword.substring(0, idx);
                 String areaName = keyword.substring(idx + 1, keyword.length() - 1);
                 String tmp;
-                System.out.println("####################################");
-                System.out.println(aptName);
-                System.out.println(areaName);
-                for(int i = 0; i < addressList.size(); i++){
+                for(int i = 0; i < addressFakeList.size(); i++){
                     tmp = addressFakeList.get(i);
                     if(tmp.contains(aptName) && tmp.contains(areaName)){
-                        System.out.println(tmp);
-                        System.out.println("#############들어옴##########");
                         keyword = addressFakeList.get(i);
                         break;
                     }
                 }
-                System.out.println(keyword);
-                System.out.println("####################################");
+                keywordSize = 0;
 //                Toast.makeText(MainActivity.this, keyword, Toast.LENGTH_SHORT).show();
                 mProgress = ProgressDialog.show(MainActivity.this, "Wait", "Search...");
 
@@ -312,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("mapX", result.get(0));
                 intent.putExtra("mapY", result.get(1));
                 intent.putExtra("address", result.get(2));
+                intent.putExtra("size", keywordSize);
                 startActivity(intent);
             }
         };
@@ -335,12 +327,10 @@ public class MainActivity extends AppCompatActivity {
             List<Double> result = new ArrayList<>();
 
             try {
-                System.out.println(keyword);
                 String tmpKeyword = keyword;
                 int idx = keyword.indexOf(" @");
                 keyword = keyword.substring(0, idx);
                 keyword = keyword.replace("$", "");
-                System.out.println(keyword);
                 StringBuilder data = new StringBuilder();
                 URL url = new URL("https://dapi.kakao.com/v2/local/search/address.json?query="
                         + URLEncoder.encode(keyword, "UTF-8"));
