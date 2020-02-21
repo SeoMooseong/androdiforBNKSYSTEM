@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 keyword = ((TextView)view).getText().toString();
                 System.out.println(keyword);
-                int idx = keyword.indexOf('(');
+                int idx = keyword.lastIndexOf('(');
                 String aptName =  keyword.substring(0, idx);
                 String areaName = keyword.substring(idx + 1, keyword.length() - 1);
                 String tmp;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(aptName);
                 System.out.println(areaName);
                 for(int i = 0; i < addressList.size(); i++){
-                    tmp = addressList.get(i);
+                    tmp = addressFakeList.get(i);
                     if(tmp.contains(aptName) && tmp.contains(areaName)){
                         System.out.println(tmp);
                         System.out.println("#############들어옴##########");
