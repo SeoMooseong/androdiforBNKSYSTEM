@@ -182,9 +182,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.home:
                     transaction.replace(R.id.frameLayout, home).commitAllowingStateLoss();
                     break;
-                case R.id.analysis:
-                    transaction.replace(R.id.frameLayout, analysis).commitAllowingStateLoss();
-                    break;
             }
             return true;
         }

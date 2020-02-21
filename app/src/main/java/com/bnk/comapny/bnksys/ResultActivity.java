@@ -181,12 +181,10 @@ public class ResultActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                System.out.println("일음");
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                System.out.println("일음");
             }
         });
     }
@@ -216,16 +214,23 @@ public class ResultActivity extends AppCompatActivity {
 
         for(int i = 0; i < LoadingActivity.aptAdressList.size(); i++){
             tmpAptList = LoadingActivity.aptAdressList.get(i);
+
+            System.out.println(filterAddress);
             if(tmpAptList.getAddress().equals(filterAddress)){
                 aptList = tmpAptList.getList();
-                filteredList = new ArrayList<>();
-                for(int j = 0; j < aptList.size(); j++){
-                    if(aptList.get(j).getSizeP() == filterSize){
-                        System.out.println("@@@@@@@@@@@@@@@@@@" + filterSize);
-                        filteredList.add(aptList.get(j));
+                if(filterSize != 0){
+                    filteredList = new ArrayList<>();
+                    for(int j = 0; j < aptList.size(); j++){
+                        if(aptList.get(j).getSizeP() == filterSize){
+                            System.out.println("@@@@@@@@@@@@@@@@@@" + filterSize);
+                            filteredList.add(aptList.get(j));
+                        }
                     }
+                    break;
+                }else{
+                    filteredList = aptList;
                 }
-                break;
+
             }
         }
         System.out.println("11111111111111111111111111111111");
