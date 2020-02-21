@@ -74,17 +74,7 @@ public class FragmentHome extends Fragment {
         listRecommand.setLayoutManager(layoutManager);
         listAdapter = new ListAdapter2(getActivity(), StartActivity.recommandList);
         listRecommand.setAdapter(listAdapter);
-//        listRecommand.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), listRecommand,
-//            new RecyclerItemClickListener.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(View view, int position) {
-//                    Apartment apt = StartActivity.recommandList.get(position);
-//                    MainActivity activity = (MainActivity)getActivity();
-//                    activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
-//                    activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
-//                    activity.startGeocodeThread();
-//                }
-//        }));
+
         mProgress.dismiss();
     }
 
@@ -108,6 +98,7 @@ public class FragmentHome extends Fragment {
                         Apartment apt = StartActivity.recommandList.get(position);
                         MainActivity activity = (MainActivity) getActivity();
                         activity.keyword = apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName();
+                        activity.keywordSize = apt.getSizeP();
                         activity.mProgress = ProgressDialog.show(activity, "Wait", "Search...");
                         activity.startGeocodeThread();
                     }

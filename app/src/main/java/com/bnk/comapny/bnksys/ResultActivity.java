@@ -59,11 +59,16 @@ public class ResultActivity extends AppCompatActivity {
     ListView listView;
     LineChart lineChart;
 
+    Double mapX;
+    Double mapY;
+    int filterSize;
     String address;
+    String filterAddress;
 
     ApartmentList tmpAptList;
     Apartment tmpApt;
     List<Apartment> aptList;
+    List<Apartment> filteredList;
     List<List<Deal>> dealList;
     SeekBar sb;
     TextView tv;
@@ -77,7 +82,6 @@ public class ResultActivity extends AppCompatActivity {
     int nodeCnt;
     String[] quarters;
 
-
     private RecyclerView listRecommand;
     private RecyclerView.Adapter listAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -89,6 +93,15 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        Intent intent = getIntent();
+
+        mapX = Double.parseDouble(intent.getStringExtra("mapX"));
+        mapY = Double.parseDouble(intent.getStringExtra("mapY"));
+
+        filterSize = intent.getIntExtra("size", 0);
+
+        address = intent.getStringExtra("address");
 
         showMap();
         showList();
@@ -179,12 +192,6 @@ public class ResultActivity extends AppCompatActivity {
 
     private void showMap(){
         //지도 관련..
-        Intent intent = getIntent();
-
-        Double mapX = Double.parseDouble(intent.getStringExtra("mapX"));
-        Double mapY = Double.parseDouble(intent.getStringExtra("mapY"));
-
-        address = intent.getStringExtra("address");
         int idx = address.indexOf("@");
         String aptName = address.substring(idx + 1);
 
@@ -202,22 +209,32 @@ public class ResultActivity extends AppCompatActivity {
 
     private void showList(){
         //리스트 관련..
-        address = address.replace("$", "");
-        address = address.replace("@", "");
+        filterAddress = address.replace("$", "");
+        filterAddress = filterAddress.replace("@", "");
 
 
         for(int i = 0; i < LoadingActivity.aptAdressList.size(); i++){
             tmpAptList = LoadingActivity.aptAdressList.get(i);
-            if(tmpAptList.getAddress().equals(address)){
+            if(tmpAptList.getAddress().equals(filterAddress)){
                 aptList = tmpAptList.getList();
+                filteredList = new ArrayList<>();
+                for(int j = 0; j < aptList.size(); j++){
+                    if(aptList.get(j).getSizeP() == filterSize){
+                        System.out.println("@@@@@@@@@@@@@@@@@@" + filterSize);
+                        filteredList.add(aptList.get(j));
+                    }
+                }
                 break;
             }
         }
+        System.out.println("11111111111111111111111111111111");
         listRecommand = (RecyclerView) findViewById(R.id.result_list);
         layoutManager = new LinearLayoutManager(this);
         listRecommand.setLayoutManager(layoutManager);
-        listAdapter = new ResultAdapter2(this,aptList);
+        listAdapter = new ResultAdapter2(this, aptList);
         listRecommand.setAdapter(listAdapter);
+        System.out.println("222222222222222222222222222222222");
+
 //        ListView listView = findViewById(R.id.result_list);
 //        AptAdapter aptAdapter = new AptAdapter(this, R.id.result_list, aptList);
 //        listView.setAdapter(aptAdapter);
@@ -226,6 +243,14 @@ public class ResultActivity extends AppCompatActivity {
         loanlist.setLayoutManager(loanManager);
         loanAdapter = new LoanAdapter2(this, Data.loans);
         loanlist.setAdapter(loanAdapter);
+    }
+
+    private void drawChart(){
+        listRecommand = (RecyclerView) findViewById(R.id.result_list);
+        layoutManager = new LinearLayoutManager(this);
+        listRecommand.setLayoutManager(layoutManager);
+        listAdapter = new ResultAdapter2(this, filteredList);
+        listRecommand.setAdapter(listAdapter);
     }
 
     private void showChart(){
@@ -241,6 +266,12 @@ public class ResultActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.result_graph_filter, sizeList);
         Spinner filter = findViewById(R.id.result_graph_filter);
         filter.setAdapter(adapter); //평수List를 Spinner 목록에 등록
+
+        if(filterSize != 0){
+            filter.setSelection(getIndex(filter, filterSize + "평"));
+        }else{
+            filter.setSelection(0);
+        }
 
         dealList = new ArrayList<>(); //평수별 Apartment 정보 list
         for(int i = 0; i < sizeList.size(); i++){
@@ -261,6 +292,7 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 drawChart(position);
+                filterSize = position;
             }
 
             @Override
@@ -268,6 +300,18 @@ public class ResultActivity extends AppCompatActivity {
                 drawChart(0);
             }
         });
+    }
+
+    private int getIndex(Spinner spinner, String str){
+
+        int index = 0;
+
+        for (int i = 0; i < spinner.getCount(); i++){
+            if (spinner.getItemAtPosition(i).equals(str)){
+                index = i;
+            }
+        }
+        return index;
     }
 
     private void drawChart(int index){
