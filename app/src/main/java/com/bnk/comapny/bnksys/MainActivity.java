@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < ori.size(); i++){
             apt = ori.get(i);
             addressFakeList.add(apt.getAddress() + " $" + apt.getRoadress() + " @" + apt.getName());
-            list.add(apt.getAddress() + " " +apt.getRoadress() + " " + apt.getName());
+            list.add(apt.getName() + "(" + apt.getAddress().replace("부산광역시 ", "") + ")");
         }
 
         TreeSet<String> tmpList = new TreeSet<>(list);
@@ -143,13 +143,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 keyword = ((TextView)view).getText().toString();
-
+                System.out.println(keyword);
+                int idx = keyword.lastIndexOf('(');
+                String aptName =  keyword.substring(0, idx);
+                String areaName = keyword.substring(idx + 1, keyword.length() - 1);
+                String tmp;
+                System.out.println("####################################");
+                System.out.println(aptName);
+                System.out.println(areaName);
                 for(int i = 0; i < addressList.size(); i++){
-                    if(keyword.equals(addressList.get(i))){
+                    tmp = addressFakeList.get(i);
+                    if(tmp.contains(aptName) && tmp.contains(areaName)){
+                        System.out.println(tmp);
+                        System.out.println("#############들어옴##########");
                         keyword = addressFakeList.get(i);
                         break;
                     }
                 }
+                System.out.println(keyword);
+                System.out.println("####################################");
 //                Toast.makeText(MainActivity.this, keyword, Toast.LENGTH_SHORT).show();
                 mProgress = ProgressDialog.show(MainActivity.this, "Wait", "Search...");
 
@@ -169,26 +181,6 @@ public class MainActivity extends AppCompatActivity {
         GeocodeThread thread = new GeocodeThread();
         thread.start();
     }
-
-//    static public void searchResult(View v, int pos){
-//
-//
-//        for(int i = 0; i < addressList.size(); i++){
-//            if(keyword.equals(addressList.get(i))){
-//                keyword = addressFakeList.get(i);
-//                break;
-//            }
-//        }
-////                Toast.makeText(MainActivity.this, keyword, Toast.LENGTH_SHORT).show();
-//        mProgress = ProgressDialog.show(v.getContext(), "Wait", "Search...");
-//
-//        InputMethodManager imm = (InputMethodManager) getSystemService(
-//                Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-//
-//        GeocodeThread thread = new GeocodeThread();
-//        thread.start();
-//    }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
